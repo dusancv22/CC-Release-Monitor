@@ -62,6 +62,14 @@ A locally-hosted Telegram bot that monitors the `anthropics/claude-code` reposit
 - `/start_monitoring` - Enable automatic background checking
 - `/stop_monitoring` - Disable automatic monitoring
 
+## 📸 Screenshots
+
+### Bot Welcome Screen
+![Bot Welcome Screen](images/bot_01.png)
+
+### Bot Commands in Action
+![Bot Commands](images/bot_02.png)
+
 ## 📊 API Usage
 
 The bot makes approximately:

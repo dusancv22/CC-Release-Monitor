@@ -60,8 +60,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         '/commit <sha> - Show detailed info about a specific commit\n'
         '/changelog - Show recent CHANGELOG.md updates\n'
         '/version - Show version management info\n'
-        '/start_monitoring - Start automatic background monitoring\n'
-        '/stop_monitoring - Stop automatic monitoring\n\n'
+        '/start\\_monitoring - Start automatic background monitoring\n'
+        '/stop\\_monitoring - Stop automatic monitoring\n\n'
         '🚀 GitHub integration with automatic monitoring is now active!',
         parse_mode='Markdown'
     )
@@ -81,8 +81,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         '• `/commit <sha>` - Show detailed information about a specific commit\n'
         '• `/changelog` - Show recent CHANGELOG.md updates\n'
         '• `/version` - Show version tracking and history\n'
-        '• `/start_monitoring` - Start automatic background monitoring\n'
-        '• `/stop_monitoring` - Stop automatic monitoring\n\n'
+        '• `/start\\_monitoring` - Start automatic background monitoring\n'
+        '• `/stop\\_monitoring` - Stop automatic monitoring\n\n'
         '*Features:*\n'
         '🔔 Automatic release monitoring (background)\n'
         '📝 Commit monitoring for repositories without releases\n'
@@ -645,10 +645,18 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                 )
                 return
             
+            # Get last check time for the changelog
+            from datetime import datetime
+            last_check = version_manager.get_statistics().get("last_check_time")
+            
             # Build response message
             response_parts = [
                 f'📋 *Recent CHANGELOG Updates - {config.github_repo}*\n'
             ]
+            
+            # Add timestamp if available
+            if last_check:
+                response_parts.append(f'🕒 *Last Updated:* {last_check}\n')
             
             for i, entry in enumerate(recent_entries):
                 if i > 0:
@@ -858,7 +866,9 @@ async def periodic_monitoring() -> None:
                     
                     if recent_entries:
                         changelog_message = '\n\n---\n\n'.join(recent_entries)
-                        changes_detected.append(("changelog", f'📋 *CHANGELOG.md Updated!*\n\n{changelog_message}'))
+                        from datetime import datetime
+                        timestamp = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
+                        changes_detected.append(("changelog", f'📋 *CHANGELOG.md Updated!*\n\n🕒 *Update Detected:* {timestamp}\n\n{changelog_message}'))
                         logger.info("New changelog content detected during monitoring")
         except Exception as e:
             logger.debug(f"Changelog not found or error during monitoring: {e}")  # Debug level since changelog may not exist
@@ -907,7 +917,7 @@ async def start_monitoring_command(update: Update, context: ContextTypes.DEFAULT
                 'Automatic monitoring is already running.\n\n'
                 f'📊 Check interval: {config.check_interval_minutes} minutes\n'
                 f'🔍 Monitoring: Releases, Commits, CHANGELOG.md\n\n'
-                'Use `/stop_monitoring` to stop automatic monitoring.',
+                'Use `/stop\\_monitoring` to stop automatic monitoring.',
                 parse_mode='Markdown'
             )
             return
@@ -936,7 +946,7 @@ async def start_monitoring_command(update: Update, context: ContextTypes.DEFAULT
             f'📦 Repository: `{config.github_repo}`\n\n'
             'You will receive notifications when changes are detected.\n\n'
             '*Commands:*\n'
-            '• `/stop_monitoring` - Stop automatic monitoring\n'
+            '• `/stop\\_monitoring` - Stop automatic monitoring\n'
             '• `/status` - Check monitoring status\n'
             '• `/check` - Manual check (works independently)',
             parse_mode='Markdown'
@@ -977,7 +987,7 @@ async def stop_monitoring_command(update: Update, context: ContextTypes.DEFAULT_
             await update.message.reply_text(
                 '⏸️ *Monitoring Already Stopped*\n\n'
                 'Automatic monitoring is not currently running.\n\n'
-                'Use `/start_monitoring` to start automatic monitoring.',
+                'Use `/start\\_monitoring` to start automatic monitoring.',
                 parse_mode='Markdown'
             )
             return
@@ -1006,7 +1016,7 @@ async def stop_monitoring_command(update: Update, context: ContextTypes.DEFAULT_
             '• `/latest` - Show latest release\n'
             '• `/commits` - Show recent commits\n'
             '• `/changelog` - Show CHANGELOG.md\n\n'
-            'Use `/start_monitoring` to resume automatic monitoring.',
+            'Use `/start\\_monitoring` to resume automatic monitoring.',
             parse_mode='Markdown'
         )
         
