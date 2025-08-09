@@ -752,10 +752,11 @@ async def version_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 try:
                     if check_time:
                         dt = datetime.fromisoformat(check_time.replace('Z', '+00:00'))
-                        time_str = format_datetime(dt, "%m-%d %H:%M")
+                        time_str = dt.strftime("%m-%d %H:%M")
                     else:
                         time_str = "Unknown"
-                except:
+                except Exception as e:
+                    logger.error(f"Error formatting time in version command: {e}")
                     time_str = "Unknown"
                 
                 status_icon = "🆕" if is_new else "📝"

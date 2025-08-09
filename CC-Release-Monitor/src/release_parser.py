@@ -28,6 +28,27 @@ class ReleaseParser:
             'numbered_items': re.compile(r'^\d+\.\s+(.+)$', re.MULTILINE)
         }
     
+    def _escape_markdown(self, text: str) -> str:
+        """
+        Escape special Markdown characters in text.
+        
+        Args:
+            text: Text to escape
+            
+        Returns:
+            Escaped text safe for Telegram Markdown
+        """
+        if not text:
+            return ""
+        
+        # Characters that need escaping in Telegram Markdown
+        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+        
+        for char in special_chars:
+            text = text.replace(char, f'\\{char}')
+        
+        return text
+    
     def parse_release(self, release_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Parse GitHub release data into structured format.
@@ -617,21 +638,26 @@ class ReleaseParser:
             subject = commit['subject']
             author = commit['author']['name'] or commit['author']['github_login'] or 'Unknown'
             
+            # Escape special Markdown characters in subject and author
+            subject_escaped = self._escape_markdown(subject)
+            author_escaped = self._escape_markdown(author)
+            
             # Date formatting
             date_str = "Unknown date"
             if commit['author']['date']:
                 try:
+                    from .utils import format_datetime
                     date_str = format_datetime(commit['author']['date'], "%m-%d %H:%M")
                 except:
                     date_str = "Unknown date"
             
             # Build commit line
-            commit_line = f"`{short_sha}` {subject}"
+            commit_line = f"`{short_sha}` {subject_escaped}"
             if len(commit_line) > 80:
-                commit_line = f"`{short_sha}` {subject[:65]}..."
+                commit_line = f"`{short_sha}` {subject_escaped[:65]}..."
             
             message_parts.append(f"**{i}.** {commit_line}")
-            message_parts.append(f"    👤 {author} • 📅 {date_str}")
+            message_parts.append(f"    👤 {author_escaped} • 📅 {date_str}")
             
             # Add stats if available
             stats = commit.get('metadata', {})
