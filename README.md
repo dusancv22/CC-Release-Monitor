@@ -61,6 +61,7 @@ A locally-hosted Telegram bot that monitors the `anthropics/claude-code` reposit
 - `/check` - Manually check for new commits/releases
 - `/commits` - Show recent commits from repository
 - `/changelog` - Display recent CHANGELOG.md updates with timestamps
+- `/changelog_latest` - Show only the latest changelog entry
 - `/commit <sha>` - Show detailed info about specific commit
 
 ### Automatic Monitoring

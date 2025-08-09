@@ -59,6 +59,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         '/commits - Show recent commits\n'
         '/commit <sha> - Show detailed info about a specific commit\n'
         '/changelog - Show recent CHANGELOG.md updates\n'
+        '/changelog\\_latest - Show only the latest changelog entry\n'
         '/version - Show version management info\n'
         '/start\\_monitoring - Start automatic background monitoring\n'
         '/stop\\_monitoring - Stop automatic monitoring\n\n'
@@ -80,6 +81,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         '• `/commits` - Show recent commits from the repository\n'
         '• `/commit <sha>` - Show detailed information about a specific commit\n'
         '• `/changelog` - Show recent CHANGELOG.md updates\n'
+        '• `/changelog\\_latest` - Show only the latest changelog entry\n'
         '• `/version` - Show version tracking and history\n'
         '• `/start\\_monitoring` - Start automatic background monitoring\n'
         '• `/stop\\_monitoring` - Stop automatic monitoring\n\n'
@@ -719,6 +721,139 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             parse_mode='Markdown'
         )
 
+async def changelog_latest_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Show only the latest CHANGELOG.md entry."""
+    try:
+        # Send initial "fetching" message
+        status_message = await update.message.reply_text(
+            '🔍 *Looking for latest changelog entry...*\n\n'
+            'Fetching the most recent changelog update.',
+            parse_mode='Markdown'
+        )
+        
+        # Try to get CHANGELOG.md content
+        try:
+            changelog_content = await github_client.get_file_content_async('CHANGELOG.md')
+            
+            if not changelog_content:
+                await status_message.edit_text(
+                    '❌ *CHANGELOG.md not found*\n\n'
+                    f'No CHANGELOG.md file found in repository `{config.github_repo}`.\n\n'
+                    'The repository may not maintain a changelog file.',
+                    parse_mode='Markdown'
+                )
+                return
+            
+            # Parse changelog content to get the latest entry only
+            changelog_lines = changelog_content.split('\n')
+            
+            # Find the first (latest) entry
+            latest_entry = []
+            in_entry = False
+            
+            for line in changelog_lines:
+                line = line.strip()
+                
+                # Check if this is a version header
+                if ((line.startswith('##') and ('v' in line.lower() or 'version' in line.lower() or 
+                   any(char.isdigit() for char in line))) or
+                   (line.startswith('#') and line.count('#') <= 2 and 
+                   ('v' in line.lower() or 'version' in line.lower() or 
+                   any(char.isdigit() for char in line)))):
+                    
+                    if in_entry:
+                        # We found the second header, stop here
+                        break
+                    else:
+                        # Start the first (latest) entry
+                        latest_entry = [line]
+                        in_entry = True
+                        
+                elif in_entry and line:
+                    # Add content to the latest entry (limit length)
+                    if len('\n'.join(latest_entry)) < 1200:  # Slightly larger limit for single entry
+                        latest_entry.append(line)
+            
+            if not latest_entry:
+                await status_message.edit_text(
+                    '❌ *No changelog entries found*\n\n'
+                    f'CHANGELOG.md exists but no version entries were found.\n\n'
+                    'The changelog format may not be recognized.',
+                    parse_mode='Markdown'
+                )
+                return
+            
+            # Get the actual last update time of CHANGELOG.md from GitHub
+            from datetime import datetime
+            last_commit = await github_client.get_file_last_commit_async('CHANGELOG.md')
+            
+            # Build response message
+            response_parts = [
+                f'📋 *Latest CHANGELOG Update - {config.github_repo}*\n'
+            ]
+            
+            # Add timestamp if available
+            if last_commit and 'commit' in last_commit:
+                commit_date = last_commit['commit']['author']['date']
+                # Parse and format the date nicely
+                try:
+                    from datetime import datetime
+                    dt = datetime.strptime(commit_date, "%Y-%m-%dT%H:%M:%SZ")
+                    formatted_date = dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+                    response_parts.append(f'🕒 *Last Updated:* {formatted_date}\n')
+                except Exception as e:
+                    logger.error(f"Error formatting changelog timestamp: {e}")
+                    response_parts.append(f'🕒 *Last Updated:* {commit_date}\n')
+            
+            # Add the latest entry
+            response_parts.append('\n'.join(latest_entry))
+            
+            # Add GitHub link to changelog
+            changelog_url = f"https://github.com/{config.github_repo}/blob/main/CHANGELOG.md"
+            response_parts.append(f'\n\n🔗 [View full CHANGELOG.md]({changelog_url})')
+            
+            response_message = '\n'.join(response_parts)
+            
+            # Truncate if too long for Telegram
+            if len(response_message) > 4000:
+                response_message = response_message[:4000] + '...\n\n🔗 [View full CHANGELOG.md]({changelog_url})'
+            
+            await status_message.edit_text(
+                response_message,
+                parse_mode='Markdown',
+                disable_web_page_preview=True
+            )
+            
+        except GitHubAPIError as api_error:
+            if 'Not Found' in str(api_error):
+                await status_message.edit_text(
+                    '❌ *CHANGELOG.md not found*\n\n'
+                    f'No CHANGELOG.md file found in repository `{config.github_repo}`.\n\n'
+                    'The repository may not maintain a changelog file.',
+                    parse_mode='Markdown'
+                )
+            else:
+                await status_message.edit_text(
+                    f'❌ *GitHub API Error*\n\n'
+                    f'Error fetching changelog: {api_error}',
+                    parse_mode='Markdown'
+                )
+    except RateLimitError as e:
+        await update.message.reply_text(
+            '⏱️ *Rate Limit Exceeded*\n\n'
+            f'GitHub API rate limit exceeded: {e}\n\n'
+            'Please try again later or add a GitHub API token for higher limits.',
+            parse_mode='Markdown'
+        )
+    except Exception as e:
+        logger.error(f"Error in changelog_latest command: {e}")
+        await update.message.reply_text(
+            '❌ *Error fetching latest changelog*\n\n'
+            f'An unexpected error occurred: {str(e)}\n\n'
+            'Please check the logs for more details.',
+            parse_mode='Markdown'
+        )
+
 async def version_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Show version management information."""
     try:
@@ -1055,7 +1190,8 @@ async def stop_monitoring_command(update: Update, context: ContextTypes.DEFAULT_
             '• `/check` - Manual release/commit check\n'
             '• `/latest` - Show latest release\n'
             '• `/commits` - Show recent commits\n'
-            '• `/changelog` - Show CHANGELOG.md\n\n'
+            '• `/changelog` - Show CHANGELOG.md\n'
+            '• `/changelog\\_latest` - Show latest changelog entry\n\n'
             'Use `/start\\_monitoring` to resume automatic monitoring.',
             parse_mode='Markdown'
         )
@@ -1096,6 +1232,7 @@ def main() -> None:
     application.add_handler(CommandHandler("commits", commits_command))
     application.add_handler(CommandHandler("commit", commit_command))
     application.add_handler(CommandHandler("changelog", changelog_command))
+    application.add_handler(CommandHandler("changelog_latest", changelog_latest_command))
     application.add_handler(CommandHandler("version", version_command))
     application.add_handler(CommandHandler("start_monitoring", start_monitoring_command))
     application.add_handler(CommandHandler("stop_monitoring", stop_monitoring_command))
@@ -1109,6 +1246,7 @@ def main() -> None:
     print("  /commits - Show recent commits from repository")
     print("  /commit <sha> - Show detailed info about a specific commit")
     print("  /changelog - Show recent CHANGELOG.md updates")
+    print("  /changelog_latest - Show only the latest changelog entry")
     print("  /version - Show version tracking info")
     print("  /start_monitoring - Start automatic monitoring")
     print("  /stop_monitoring - Stop automatic monitoring")
