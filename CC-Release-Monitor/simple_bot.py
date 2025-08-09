@@ -648,7 +648,6 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             # Get the actual last update time of CHANGELOG.md from GitHub
             from datetime import datetime
             last_commit = await github_client.get_file_last_commit_async('CHANGELOG.md')
-            logger.info(f"DEBUG: Fetched last_commit: {last_commit is not None}")
             
             # Build response message
             response_parts = [
@@ -658,19 +657,15 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             # Add timestamp if available
             if last_commit and 'commit' in last_commit:
                 commit_date = last_commit['commit']['author']['date']
-                logger.info(f"DEBUG: Found commit date: {commit_date}")
                 # Parse and format the date nicely
                 try:
                     from datetime import datetime
                     dt = datetime.strptime(commit_date, "%Y-%m-%dT%H:%M:%SZ")
                     formatted_date = dt.strftime("%Y-%m-%d %H:%M:%S UTC")
                     response_parts.append(f'🕒 *Last Updated:* {formatted_date}\n')
-                    logger.info(f"DEBUG: Added formatted timestamp: {formatted_date}")
                 except Exception as e:
-                    logger.error(f"DEBUG: Date parsing error: {e}")
+                    logger.error(f"Error formatting changelog timestamp: {e}")
                     response_parts.append(f'🕒 *Last Updated:* {commit_date}\n')
-            else:
-                logger.warning(f"DEBUG: No commit data found. last_commit={last_commit}")
             
             for i, entry in enumerate(recent_entries):
                 if i > 0:
