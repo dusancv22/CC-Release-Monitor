@@ -109,3 +109,4 @@ Thumbs.db
 # Project specific
 config.json
 *.log
+CLAUDE.md
