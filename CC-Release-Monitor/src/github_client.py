@@ -410,6 +410,32 @@ class GitHubClient:
             logger.error(f"Failed to fetch commit {commit_sha} after retries: {e}")
             return None
     
+    def get_file_last_commit(self, file_path: str) -> Optional[Dict[str, Any]]:
+        """
+        Get the last commit that modified a specific file.
+        
+        Args:
+            file_path: Path to file in repository
+            
+        Returns:
+            Commit data with timestamp, or None if not found
+        """
+        url = f"{self.base_url}/repos/{self.repo}/commits"
+        params = {"path": file_path, "per_page": 1}
+        
+        try:
+            logger.debug(f"Fetching last commit for file: {file_path}")
+            response = self._make_request(url, params)
+            
+            if response and len(response) > 0:
+                logger.info(f"Found last commit for file: {file_path}")
+                return response[0]
+            return None
+            
+        except GitHubAPIError as e:
+            logger.debug(f"Error fetching commits for file {file_path}: {e}")
+            return None
+    
     def get_file_content(self, file_path: str, branch: str = None) -> Optional[str]:
         """
         Get file content from the repository.
@@ -452,6 +478,30 @@ class GitHubClient:
                 logger.warning(f"File not found: {file_path}")
                 return None
             raise
+    
+    async def get_file_last_commit_async(self, file_path: str) -> Optional[Dict[str, Any]]:
+        """
+        Async version to get the last commit that modified a specific file.
+        
+        Args:
+            file_path: Path to file in repository
+            
+        Returns:
+            Commit data with timestamp, or None if not found
+        """
+        async def fetch_last_commit():
+            return self.get_file_last_commit(file_path)
+        
+        try:
+            return await retry_async(
+                fetch_last_commit,
+                max_retries=self.config.max_retries,
+                delay=self.config.retry_delay_seconds,
+                exceptions=(GitHubAPIError, RateLimitError)
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch last commit for {file_path} after retries: {e}")
+            return None
     
     async def get_file_content_async(self, file_path: str, branch: str = None) -> Optional[str]:
         """

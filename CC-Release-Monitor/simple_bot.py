@@ -645,9 +645,9 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                 )
                 return
             
-            # Get last check time for the changelog
+            # Get the actual last update time of CHANGELOG.md from GitHub
             from datetime import datetime
-            last_check = version_manager.get_statistics().get("last_check_time")
+            last_commit = await github_client.get_file_last_commit_async('CHANGELOG.md')
             
             # Build response message
             response_parts = [
@@ -655,8 +655,16 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             ]
             
             # Add timestamp if available
-            if last_check:
-                response_parts.append(f'🕒 *Last Updated:* {last_check}\n')
+            if last_commit and 'commit' in last_commit:
+                commit_date = last_commit['commit']['author']['date']
+                # Parse and format the date nicely
+                try:
+                    from datetime import datetime
+                    dt = datetime.strptime(commit_date, "%Y-%m-%dT%H:%M:%SZ")
+                    formatted_date = dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+                    response_parts.append(f'🕒 *Last Updated:* {formatted_date}\n')
+                except:
+                    response_parts.append(f'🕒 *Last Updated:* {commit_date}\n')
             
             for i, entry in enumerate(recent_entries):
                 if i > 0:
