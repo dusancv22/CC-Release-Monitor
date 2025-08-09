@@ -30,7 +30,7 @@ class ReleaseParser:
     
     def _escape_markdown(self, text: str) -> str:
         """
-        Escape special Markdown characters in text.
+        Escape special Markdown characters in text for Telegram's legacy Markdown format.
         
         Args:
             text: Text to escape
@@ -41,11 +41,12 @@ class ReleaseParser:
         if not text:
             return ""
         
-        # Characters that need escaping in Telegram Markdown
-        special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-        
-        for char in special_chars:
-            text = text.replace(char, f'\\{char}')
+        # Only these characters need escaping in Telegram's legacy Markdown format
+        # Note: We don't escape ` here since we use it in code blocks intentionally
+        text = text.replace('_', '\\_')  # Prevent italic formatting
+        text = text.replace('*', '\\*')  # Prevent bold formatting  
+        text = text.replace('[', '\\[')  # Prevent link formatting
+        text = text.replace(']', '\\]')  # Prevent link formatting
         
         return text
     
@@ -646,9 +647,9 @@ class ReleaseParser:
             date_str = "Unknown date"
             if commit['author']['date']:
                 try:
-                    from .utils import format_datetime
                     date_str = format_datetime(commit['author']['date'], "%m-%d %H:%M")
-                except:
+                except Exception as e:
+                    logger.error(f"Error formatting commit date: {e}")
                     date_str = "Unknown date"
             
             # Build commit line
