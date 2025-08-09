@@ -4,11 +4,13 @@ A locally-hosted Telegram bot that monitors the `anthropics/claude-code` reposit
 
 ## 🚀 Features
 
-- **GitHub Integration**: Monitors commits and changelog updates
+- **GitHub Integration**: Monitors commits and changelog updates with timestamps
 - **Telegram Notifications**: Automatic alerts for new changes
+- **System Tray Integration**: Run silently in background with tray controls
 - **Local Hosting**: No cloud dependencies, runs on your machine
 - **Cost Effective**: Uses GitHub's free API tier (5,000 requests/hour)
 - **User Control**: Start/stop monitoring with simple commands
+- **Multiple Launch Options**: Console window or silent background mode
 
 ## ⚙️ Setup
 
@@ -38,11 +40,14 @@ A locally-hosted Telegram bot that monitors the `anthropics/claude-code` reposit
 
 4. **Start the bot**
    ```bash
-   # Option 1: Using Python directly
-   python simple_bot.py
-   
-   # Option 2: Using the launcher (Windows)
+   # Option 1: Console mode (visible window)
    start_bot.bat
+   
+   # Option 2: Silent mode (system tray only)
+   start_bot_tray_silent.bat
+   
+   # Option 3: Using Python directly
+   python simple_bot.py
    ```
 
 ## 🤖 Bot Commands
@@ -55,7 +60,7 @@ A locally-hosted Telegram bot that monitors the `anthropics/claude-code` reposit
 ### Monitoring Commands
 - `/check` - Manually check for new commits/releases
 - `/commits` - Show recent commits from repository
-- `/changelog` - Display recent CHANGELOG.md updates
+- `/changelog` - Display recent CHANGELOG.md updates with timestamps
 - `/commit <sha>` - Show detailed info about specific commit
 
 ### Automatic Monitoring
@@ -106,8 +111,11 @@ CC-Release-Monitor/
 ├── data/                   # Runtime data storage
 ├── logs/                   # Application logs
 ├── tests/                  # Test suite
+├── images/                 # Bot screenshots
 ├── simple_bot.py          # Main bot implementation
-├── start_bot.bat          # Windows launcher
+├── tray_bot.py            # System tray application
+├── start_bot.bat          # Console launcher
+├── start_bot_tray_silent.bat  # Silent system tray launcher
 ├── requirements.txt       # Python dependencies
 ├── .env.example          # Environment template
 └── README.md             # This file
@@ -115,10 +123,17 @@ CC-Release-Monitor/
 
 ## 🚀 Quick Start (Windows)
 
+### Console Mode (Visible Window)
 1. Double-click `start_bot.bat`
 2. Wait for "Scheduler started!" message
 3. Message your bot on Telegram
 4. Send `/start_monitoring` to begin automatic notifications
+
+### Silent Mode (System Tray)
+1. Double-click `start_bot_tray_silent.bat`
+2. Look for the CC Release Monitor icon in your system tray
+3. Right-click the tray icon to control the bot
+4. Message your bot on Telegram and send `/start_monitoring`
 
 ## 🛠️ Troubleshooting
 
@@ -139,18 +154,20 @@ CC-Release-Monitor/
 
 ## 📱 Usage Example
 
-1. Start bot with `start_bot.bat`
+1. Start bot with `start_bot.bat` (console) or `start_bot_tray_silent.bat` (tray)
 2. Find your bot on Telegram
 3. Send `/start` to see available commands
 4. Send `/start_monitoring` to enable automatic checking
 5. Bot will notify you when Claude Code commits or changelog updates occur
+6. Use `/changelog` to see timestamped changelog updates
 
 ## 🔄 Updates
 
 The bot automatically tracks:
-- New commits to the main branch
-- Changes to CHANGELOG.md
+- New commits to the main branch with detailed information
+- Changes to CHANGELOG.md with actual GitHub timestamps
 - Any future GitHub releases (if they start using releases)
+- Full commit history and file change details
 
 ## 📞 Support
 
