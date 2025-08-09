@@ -725,17 +725,23 @@ async def version_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         stats = version_manager.get_statistics()
         history = version_manager.get_version_history(limit=5)
         
+        logger.info(f"Version command - Stats keys: {list(stats.keys()) if stats else 'None'}")
+        logger.info(f"Version command - History count: {len(history) if history else 0}")
+        if history:
+            logger.info(f"Version command - First entry keys: {list(history[0].keys()) if history[0] else 'None'}")
+        
         message_parts = ['📊 *Version Management Info*\n']
         
-        # Current status
+        # Current status with safe access
         message_parts.append('*Current Status:*')
-        message_parts.append(f'📝 Last Known Version: {stats["last_known_version"] or "None"}')
-        message_parts.append(f'🕒 Last Check: {stats["last_check_time"] or "Never"}')
-        message_parts.append(f'📊 Total Checks: {stats["check_count"]}')
-        message_parts.append(f'📈 New Versions Found: {stats["new_versions_detected"]}')
+        message_parts.append(f'📝 Last Known Version: {stats.get("last_known_version") or "None"}')
+        message_parts.append(f'🕒 Last Check: {stats.get("last_check_time") or "Never"}')
+        message_parts.append(f'📊 Total Checks: {stats.get("check_count", 0)}')
+        message_parts.append(f'📈 New Versions Found: {stats.get("new_versions_detected", 0)}')
         
-        if stats["time_since_last_check"]:
-            hours = stats["time_since_last_check"] / 3600
+        time_since = stats.get("time_since_last_check")
+        if time_since:
+            hours = time_since / 3600
             message_parts.append(f'⏰ Time Since Last Check: {hours:.1f} hours')
         
         message_parts.append('')
@@ -743,34 +749,58 @@ async def version_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         # Recent history
         if history:
             message_parts.append('*Recent Version History:*')
-            for entry in history:
-                version = entry['version']
-                is_new = entry.get('is_new', False)
-                check_time = entry.get('check_time', '')
-                
-                # Format time
+            valid_entries = 0
+            for i, entry in enumerate(history):
                 try:
-                    if check_time:
-                        dt = datetime.fromisoformat(check_time.replace('Z', '+00:00'))
-                        time_str = dt.strftime("%m-%d %H:%M")
-                    else:
+                    # Validate entry structure
+                    if not isinstance(entry, dict):
+                        logger.warning(f"Invalid history entry at index {i}: not a dictionary")
+                        continue
+                    
+                    # Check for required keys
+                    if 'version' not in entry:
+                        logger.warning(f"Invalid history entry at index {i}: missing 'version' key")
+                        continue
+                    
+                    version = entry['version']
+                    if not version:
+                        logger.warning(f"Invalid history entry at index {i}: empty version")
+                        continue
+                    
+                    is_new = entry.get('is_new', False)
+                    check_time = entry.get('check_time', '')
+                    
+                    # Format time
+                    try:
+                        if check_time:
+                            dt = datetime.fromisoformat(check_time.replace('Z', '+00:00'))
+                            time_str = dt.strftime("%m-%d %H:%M")
+                        else:
+                            time_str = "Unknown"
+                    except Exception as e:
+                        logger.error(f"Error formatting time in version command: {e}")
                         time_str = "Unknown"
+                    
+                    status_icon = "🆕" if is_new else "📝"
+                    prerelease_icon = " 🧪" if entry.get('prerelease', False) else ""
+                    
+                    message_parts.append(f'{status_icon} `{version}`{prerelease_icon} - {time_str}')
+                    valid_entries += 1
+                    
                 except Exception as e:
-                    logger.error(f"Error formatting time in version command: {e}")
-                    time_str = "Unknown"
-                
-                status_icon = "🆕" if is_new else "📝"
-                prerelease_icon = " 🧪" if entry.get('prerelease', False) else ""
-                
-                message_parts.append(f'{status_icon} `{version}`{prerelease_icon} - {time_str}')
+                    logger.error(f"Error processing history entry at index {i}: {e}")
+                    continue
+            
+            if valid_entries == 0:
+                message_parts.append('*No valid version history entries found*')
         else:
             message_parts.append('*No version history available*')
         
         message_parts.append('')
         message_parts.append('*Storage Info:*')
-        message_parts.append(f'💾 Data File: {"✅" if stats["data_file_exists"] else "❌"}')
-        message_parts.append(f'📚 History File: {"✅" if stats["history_file_exists"] else "❌"}')
-        message_parts.append(f'📁 History Entries: {stats["total_history_entries"]}')
+        message_parts.append(f'💾 Data File: {"✅" if stats.get("data_file_exists") else "❌"}')
+        message_parts.append(f'📚 History File: {"✅" if stats.get("history_file_exists") else "❌"}')
+        message_parts.append(f'📁 History Entries: {stats.get("total_history_entries", 0)}')
         
         await update.message.reply_text(
             '\n'.join(message_parts),
