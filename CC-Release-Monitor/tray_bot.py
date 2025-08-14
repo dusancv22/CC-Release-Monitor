@@ -8,7 +8,9 @@ import sys
 import os
 import subprocess
 import threading
+import logging
 from pathlib import Path
+from datetime import datetime
 
 # Try to import pystray, if not available, fall back to simple hidden mode
 try:
@@ -24,6 +26,24 @@ class BotTrayApp:
     def __init__(self):
         self.bot_process = None
         self.icon = None
+        self.setup_logging()
+        
+    def setup_logging(self):
+        """Setup logging for the tray application"""
+        log_dir = Path(__file__).parent / "logs"
+        log_dir.mkdir(exist_ok=True)
+        log_file = log_dir / f"tray_bot_{datetime.now().strftime('%Y%m%d')}.log"
+        
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_file),
+                logging.StreamHandler(sys.stdout)
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Tray bot application started")
         
     def create_icon_image(self):
         """Create a simple icon for the system tray"""
@@ -43,51 +63,119 @@ class BotTrayApp:
     
     def start_bot(self, icon=None, item=None):
         """Start the bot process"""
-        if self.bot_process and self.bot_process.poll() is None:
-            print("Bot is already running")
+        try:
+            if self.bot_process and self.bot_process.poll() is None:
+                self.logger.info("Bot is already running")
+                return
+                
+            # Start the bot in a subprocess
+            bot_path = Path(__file__).parent / "simple_bot.py"
+            python_exe = r"C:\Users\Dusan\miniconda3\python.exe"
+            
+            # Verify files exist
+            if not bot_path.exists():
+                self.logger.error(f"Bot script not found at {bot_path}")
+                return
+            if not Path(python_exe).exists():
+                self.logger.error(f"Python executable not found at {python_exe}")
+                return
+            
+            self.logger.info(f"Starting bot: {python_exe} {bot_path}")
+            
+            # Use CREATE_NO_WINDOW flag to hide console on Windows
+            if sys.platform == 'win32':
+                CREATE_NO_WINDOW = 0x08000000
+                self.bot_process = subprocess.Popen(
+                    [python_exe, str(bot_path)],
+                    creationflags=CREATE_NO_WINDOW,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    cwd=str(Path(__file__).parent)
+                )
+            else:
+                self.bot_process = subprocess.Popen(
+                    [python_exe, str(bot_path)],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    cwd=str(Path(__file__).parent)
+                )
+            
+            self.logger.info(f"Bot started in background with PID: {self.bot_process.pid}")
+            
+            # Start a thread to monitor the process
+            threading.Thread(target=self._monitor_bot_process, daemon=True).start()
+            
+        except Exception as e:
+            self.logger.error(f"Failed to start bot: {e}")
+            print(f"Failed to start bot: {e}")
+    
+    def _monitor_bot_process(self):
+        """Monitor the bot process and log output"""
+        if not self.bot_process:
             return
             
-        # Start the bot in a subprocess
-        bot_path = Path(__file__).parent / "simple_bot.py"
-        python_exe = r"C:\Users\Dusan\miniconda3\python.exe"
-        
-        # Use CREATE_NO_WINDOW flag to hide console on Windows
-        if sys.platform == 'win32':
-            CREATE_NO_WINDOW = 0x08000000
-            self.bot_process = subprocess.Popen(
-                [python_exe, str(bot_path)],
-                creationflags=CREATE_NO_WINDOW,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-        else:
-            self.bot_process = subprocess.Popen(
-                [python_exe, str(bot_path)],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-        print("Bot started in background")
+        try:
+            # Read stderr in a separate thread to capture startup errors
+            while self.bot_process.poll() is None:
+                if self.bot_process.stderr:
+                    error_line = self.bot_process.stderr.readline()
+                    if error_line:
+                        error_msg = error_line.decode('utf-8', errors='ignore').strip()
+                        if error_msg:
+                            self.logger.error(f"Bot stderr: {error_msg}")
+                
+                # Check if process is still alive
+                threading.Event().wait(5)
+            
+            # Process has ended, log the exit code
+            exit_code = self.bot_process.returncode
+            if exit_code != 0:
+                self.logger.error(f"Bot process ended with exit code: {exit_code}")
+                # Try to read any remaining error output
+                if self.bot_process.stderr:
+                    remaining_errors = self.bot_process.stderr.read().decode('utf-8', errors='ignore')
+                    if remaining_errors.strip():
+                        self.logger.error(f"Bot final errors: {remaining_errors.strip()}")
+            else:
+                self.logger.info("Bot process ended normally")
+                
+        except Exception as e:
+            self.logger.error(f"Error monitoring bot process: {e}")
     
     def stop_bot(self, icon=None, item=None):
         """Stop the bot process"""
-        if self.bot_process and self.bot_process.poll() is None:
-            self.bot_process.terminate()
-            self.bot_process.wait(timeout=5)
-            print("Bot stopped")
-        else:
-            print("Bot is not running")
+        try:
+            if self.bot_process and self.bot_process.poll() is None:
+                self.logger.info("Stopping bot process...")
+                self.bot_process.terminate()
+                self.bot_process.wait(timeout=5)
+                self.logger.info("Bot stopped")
+            else:
+                self.logger.info("Bot is not running")
+        except Exception as e:
+            self.logger.error(f"Error stopping bot: {e}")
+            if self.bot_process:
+                try:
+                    self.bot_process.kill()
+                    self.logger.info("Bot process killed forcefully")
+                except:
+                    pass
     
     def restart_bot(self, icon=None, item=None):
         """Restart the bot process"""
+        self.logger.info("Restarting bot...")
         self.stop_bot()
+        threading.Event().wait(2)  # Wait a bit before restarting
         self.start_bot()
-        print("Bot restarted")
+        self.logger.info("Bot restart completed")
     
     def quit_app(self, icon=None, item=None):
         """Quit the application"""
+        self.logger.info("Shutting down tray application...")
         self.stop_bot()
         if self.icon:
             self.icon.stop()
+        self.logger.info("Tray application shut down")
         sys.exit(0)
     
     def run_with_tray(self):
@@ -113,36 +201,47 @@ class BotTrayApp:
         )
         
         # Start the bot automatically
+        self.logger.info("Starting system tray with automatic bot launch...")
         self.start_bot()
         
         # Run the icon (this blocks until exit)
-        self.icon.run()
+        try:
+            self.icon.run()
+        except Exception as e:
+            self.logger.error(f"Error running system tray: {e}")
+            self.stop_bot()
+            raise
     
     def run_hidden(self):
         """Run the bot in hidden mode without tray icon"""
+        self.logger.info("Running in hidden mode without system tray...")
         self.start_bot()
-        print("Bot is running in the background (hidden mode)")
-        print("Press Ctrl+C to stop...")
+        self.logger.info("Bot is running in the background (hidden mode)")
         try:
             # Keep the script running
             while True:
                 if self.bot_process and self.bot_process.poll() is not None:
-                    print("Bot process ended unexpectedly")
+                    self.logger.error("Bot process ended unexpectedly")
                     break
                 threading.Event().wait(1)
         except KeyboardInterrupt:
-            print("\nStopping bot...")
+            self.logger.info("Keyboard interrupt received, stopping bot...")
             self.stop_bot()
 
 def main():
-    app = BotTrayApp()
-    
-    if TRAY_AVAILABLE and sys.platform == 'win32':
-        print("Starting CC Release Monitor Bot with system tray icon...")
-        app.run_with_tray()
-    else:
-        print("Starting CC Release Monitor Bot in hidden mode...")
-        app.run_hidden()
+    try:
+        app = BotTrayApp()
+        
+        if TRAY_AVAILABLE and sys.platform == 'win32':
+            app.logger.info("Starting CC Release Monitor Bot with system tray icon...")
+            app.run_with_tray()
+        else:
+            app.logger.info("pystray not available or not on Windows, starting in hidden mode...")
+            app.run_hidden()
+    except Exception as e:
+        print(f"Fatal error in main: {e}")
+        logging.error(f"Fatal error in main: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

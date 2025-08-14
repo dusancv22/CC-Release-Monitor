@@ -1216,8 +1216,8 @@ def main() -> None:
     print(f"Data Directory: {config.data_directory}")
     print(f"Check Interval: {config.check_interval_minutes} minutes")
     
-    # Create the Application
-    application = Application.builder().token(BOT_TOKEN).build()
+    # Create the Application without job_queue to avoid weak reference issue
+    application = Application.builder().token(BOT_TOKEN).job_queue(None).build()
     bot_application = application  # Store global reference for monitoring
     
     # Initialize scheduler
