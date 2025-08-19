@@ -29,7 +29,23 @@
       "WebFetch(domain:registry.npmjs.org)",
       "Bash(tasklist:*)",
       "Bash(conda list:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(py:*)",
+      "Bash(.venvScriptspip install:*)",
+      "Bash(\"C:\\Users\\dusan\\source\\repos\\CC-Release-Monitor\\CC-Release-Monitor\\venv\\Scripts\\python.exe\" -m pip install -r requirements.txt)",
+      "Bash(\"C:\\Users\\dusan\\source\\repos\\CC-Release-Monitor\\CC-Release-Monitor\\venv\\Scripts\\python.exe\" remote_bot.py)",
+      "Bash(copy:*)",
+      "Bash(.venvScriptspython.exe remote_bot.py)",
+      "Bash(mv:*)",
+      "Bash(if [ -d \"venv\" ])",
+      "Bash(then echo \"venv exists at root\")",
+      "Bash(else echo \"venv does not exist at root\")",
+      "Bash(fi)",
+      "Bash(if [ ! -f \".env.example\" ])",
+      "Bash(then cp CC-Release-Monitor/.env.example .)",
+      "Bash(if [ ! -f .env ])",
+      "Bash(then cp CC-Release-Monitor/.env .)",
+      "Bash(else echo \".env already exists at root\")"
     ],
     "deny": []
   }

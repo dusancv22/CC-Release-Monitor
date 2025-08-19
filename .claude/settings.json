@@ -1,0 +1,17 @@
+{
+  "description": "Claude Code settings for remote approval system",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/remote_approval.py\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}
