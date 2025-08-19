@@ -45,7 +45,9 @@
       "Bash(then cp CC-Release-Monitor/.env.example .)",
       "Bash(if [ ! -f .env ])",
       "Bash(then cp CC-Release-Monitor/.env .)",
-      "Bash(else echo \".env already exists at root\")"
+      "Bash(else echo \".env already exists at root\")",
+      "Bash(set)",
+      "Task"
     ],
     "deny": []
   }

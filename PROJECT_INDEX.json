@@ -1,70 +1,35 @@
 {
-  "indexed_at": "2025-08-19T16:09:30.865220",
+  "indexed_at": "2025-08-19T16:47:58.704913",
   "root": ".",
   "project_structure": {
     "type": "tree",
     "root": ".",
     "tree": [
       ".",
-      "+-- $CLAUDE_PROJECT_DIR/ (1 files)",
-      "|   +-- hooks/ (1 files)",
-      "+-- CC-Release-Monitor/ (1647 files)",
-      "|   +-- data/",
-      "|   +-- images/",
-      "|   +-- logs/",
-      "|   +-- src/ (11 files)",
-      "|   |   +-- models/ (2 files)",
-      "|   +-- tests/ (2 files)",
-      "|   +-- README.md",
-      "|   +-- requirements.txt",
+      "+-- data/",
+      "+-- docs/",
       "+-- images/",
-      "+-- src/ (4 files)",
+      "+-- logs/",
+      "+-- src/ (11 files)",
       "|   +-- models/ (2 files)",
-      "+-- README.md"
+      "+-- tests/ (2 files)",
+      "+-- README.md",
+      "+-- requirements.txt"
     ]
   },
   "documentation_map": {
-    "cc-release-monitor-implementation-plan.md": {
+    "CLAUDE.md": {
       "sections": [
-        "Claude Code Release Monitor Implementation Plan",
+        "CLAUDE.md",
         "Project Overview",
-        "Implementation Strategy",
-        "Deployment Approach",
-        "Core Architecture",
-        "6-Phase Implementation Plan",
-        "Phase 1: Repository & Documentation Setup",
-        "Phase 2: Core Bot Infrastructure",
-        "Phase 3: GitHub Integration"
-      ],
-      "architecture_hints": []
-    },
-    "claude-code-release-monitor-plan.md": {
-      "sections": [
-        "Claude Code Release Monitor - Telegram Bot Plan",
-        "Overview",
-        "Tasks",
-        "1. Research GitHub API endpoints for monitoring Claude Code releases",
-        "2. Set up basic Telegram bot structure with BotFather token",
-        "3. Create version checking logic using GitHub releases API",
-        "4. Implement notification system to send updates via Telegram",
-        "5. Add scheduling/polling mechanism for periodic checks",
-        "6. Create simple deployment setup (local or cloud)",
-        "Technical Considerations"
-      ],
-      "architecture_hints": []
-    },
-    "IMPLEMENTATION_SUMMARY.md": {
-      "sections": [
-        "Remote Approval System - Implementation Summary",
-        "\u2705 Successfully Implemented",
+        "Key Commands",
+        "Development Commands",
+        "Windows Batch Launchers",
+        "Testing",
+        "Architecture",
         "Core Components",
-        "Key Features",
-        "Security & Authorization",
-        "User Experience",
-        "Smart Filtering",
-        "How It Works",
-        "Usage Instructions",
-        "Quick Start"
+        "Bot Commands Architecture",
+        "Data Flow"
       ],
       "architecture_hints": []
     },
@@ -98,7 +63,66 @@
       ],
       "architecture_hints": []
     },
-    "remote_approval_design.md": {
+    "README_nested.md": {
+      "sections": [
+        "CC Release Monitor - Telegram Bot",
+        "\ud83d\ude80 Features",
+        "\u2699\ufe0f Setup",
+        "Prerequisites",
+        "Installation",
+        "\ud83e\udd16 Bot Commands",
+        "Basic Commands",
+        "Monitoring Commands",
+        "Automatic Monitoring",
+        "\ud83d\udcf8 Screenshots"
+      ],
+      "architecture_hints": []
+    },
+    "docs\\cc-release-monitor-implementation-plan.md": {
+      "sections": [
+        "Claude Code Release Monitor Implementation Plan",
+        "Project Overview",
+        "Implementation Strategy",
+        "Deployment Approach",
+        "Core Architecture",
+        "6-Phase Implementation Plan",
+        "Phase 1: Repository & Documentation Setup",
+        "Phase 2: Core Bot Infrastructure",
+        "Phase 3: GitHub Integration"
+      ],
+      "architecture_hints": []
+    },
+    "docs\\claude-code-release-monitor-plan.md": {
+      "sections": [
+        "Claude Code Release Monitor - Telegram Bot Plan",
+        "Overview",
+        "Tasks",
+        "1. Research GitHub API endpoints for monitoring Claude Code releases",
+        "2. Set up basic Telegram bot structure with BotFather token",
+        "3. Create version checking logic using GitHub releases API",
+        "4. Implement notification system to send updates via Telegram",
+        "5. Add scheduling/polling mechanism for periodic checks",
+        "6. Create simple deployment setup (local or cloud)",
+        "Technical Considerations"
+      ],
+      "architecture_hints": []
+    },
+    "docs\\IMPLEMENTATION_SUMMARY.md": {
+      "sections": [
+        "Remote Approval System - Implementation Summary",
+        "\u2705 Successfully Implemented",
+        "Core Components",
+        "Key Features",
+        "Security & Authorization",
+        "User Experience",
+        "Smart Filtering",
+        "How It Works",
+        "Usage Instructions",
+        "Quick Start"
+      ],
+      "architecture_hints": []
+    },
+    "docs\\remote_approval_design.md": {
       "sections": [
         "Claude Code Remote Approval System Design",
         "Overview",
@@ -113,7 +137,7 @@
       ],
       "architecture_hints": []
     },
-    "REMOTE_APPROVAL_SETUP.md": {
+    "docs\\REMOTE_APPROVAL_SETUP.md": {
       "sections": [
         "Remote Approval System Setup Guide",
         "Overview",
@@ -128,7 +152,7 @@
       ],
       "architecture_hints": []
     },
-    "TROUBLESHOOTING_SESSION.md": {
+    "docs\\TROUBLESHOOTING_SESSION.md": {
       "sections": [
         "CC Release Monitor - Remote Approval System Troubleshooting Session",
         "Session Date: 2025-08-19",
@@ -142,42 +166,30 @@
         "4. Dependencies Added"
       ],
       "architecture_hints": []
-    },
-    "CC-Release-Monitor\\README.md": {
-      "sections": [
-        "CC Release Monitor - Telegram Bot",
-        "\ud83d\ude80 Features",
-        "\u2699\ufe0f Setup",
-        "Prerequisites",
-        "Installation",
-        "\ud83e\udd16 Bot Commands",
-        "Basic Commands",
-        "Monitoring Commands",
-        "Automatic Monitoring",
-        "\ud83d\udcf8 Screenshots"
-      ],
-      "architecture_hints": []
     }
   },
   "directory_purposes": {
+    "docs": "Project documentation",
     "src": "Source code root directory",
-    "CC-Release-Monitor\\src": "Source code root directory",
-    "CC-Release-Monitor\\tests": "Test files and test utilities",
-    "src\\models": "Data models and database schemas",
-    "CC-Release-Monitor\\src\\models": "Data models and database schemas"
+    "tests": "Test files and test utilities",
+    "src\\models": "Data models and database schemas"
   },
   "stats": {
-    "total_files": 26,
-    "total_directories": 15,
+    "total_files": 21,
+    "total_directories": 9,
     "fully_parsed": {
-      "python": 24
+      "python": 18
     },
     "listed_only": {
-      "json": 2
+      "json": 3
     },
-    "markdown_files": 9
+    "markdown_files": 10
   },
   "files": {
+    "PROJECT_INDEX.json": {
+      "language": "json",
+      "parsed": false
+    },
     "remote_bot.py": {
       "language": "python",
       "parsed": true,
@@ -209,8 +221,6 @@
           "called_by": [
             "start_monitoring_command",
             "post_init",
-            "start_monitoring_command",
-            "post_init",
             "main",
             "CCReleaseMonitorBot.run_forever"
           ]
@@ -258,7 +268,6 @@
           "signature": "async (application: Application) -> None",
           "called_by": [
             "main",
-            "main",
             "main"
           ]
         },
@@ -279,118 +288,7 @@
       },
       "call_graph": {}
     },
-    ".claude\\settings.json": {
-      "language": "json",
-      "parsed": false,
-      "purpose": "Configuration"
-    },
-    ".claude\\settings.local.json": {
-      "language": "json",
-      "parsed": false,
-      "purpose": "Configuration"
-    },
-    "CC-Release-Monitor\\remote_bot.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "logging",
-        "os",
-        "asyncio",
-        "threading",
-        "datetime",
-        "dotenv",
-        "telegram",
-        "telegram.ext",
-        "apscheduler.schedulers.asyncio",
-        "apscheduler.triggers.interval",
-        "src.config",
-        "src.github_client",
-        "src.version_manager",
-        "src.release_parser",
-        "src.utils",
-        "src.bot_approval",
-        "src.ipc_server",
-        "requests",
-        "requests"
-      ],
-      "functions": {
-        "start": {
-          "doc": "Send a message when the command /start is issued.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None",
-          "called_by": [
-            "start_monitoring_command",
-            "post_init",
-            "start_monitoring_command",
-            "post_init",
-            "main",
-            "CCReleaseMonitorBot.run_forever"
-          ]
-        },
-        "help_command": {
-          "doc": "Send a message when the command /help is issued.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "status": {
-          "doc": "Send bot status information.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "check_command": {
-          "doc": "Manually check for new releases.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "latest_command": {
-          "doc": "Show information about the latest release.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "periodic_monitoring": {
-          "doc": "Periodic monitoring function that runs in background.",
-          "signature": "async () -> None"
-        },
-        "start_monitoring_command": {
-          "doc": "Start automatic monitoring.",
-          "calls": [
-            "start"
-          ],
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "stop_monitoring_command": {
-          "doc": "Stop automatic monitoring.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "start_ipc_server": {
-          "doc": "Start the IPC server in a separate thread.",
-          "signature": "()"
-        },
-        "post_init": {
-          "doc": "Initialize the bot after startup.",
-          "calls": [
-            "start"
-          ],
-          "signature": "async (application: Application) -> None",
-          "called_by": [
-            "main",
-            "main",
-            "main"
-          ]
-        },
-        "main": {
-          "doc": "Start the bot.",
-          "calls": [
-            "post_init"
-          ],
-          "signature": "() -> None",
-          "called_by": [
-            "run_bot"
-          ]
-        }
-      },
-      "classes": {},
-      "constants": {
-        "BOT_TOKEN": "value"
-      },
-      "call_graph": {}
-    },
-    "CC-Release-Monitor\\run.py": {
+    "run.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -443,7 +341,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\simple_bot.py": {
+    "simple_bot.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -472,8 +370,6 @@
           "doc": "Send a message when the command /start is issued.",
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None",
           "called_by": [
-            "start_monitoring_command",
-            "post_init",
             "start_monitoring_command",
             "post_init",
             "main",
@@ -546,7 +442,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\tray_bot.py": {
+    "tray_bot.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -599,9 +495,9 @@
               "doc": "Start the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_hidden",
+                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_with_tray",
-                "BotTrayApp.restart_bot"
+                "BotTrayApp.run_hidden"
               ]
             },
             "_monitor_bot_process": {
@@ -612,10 +508,10 @@
               "doc": "Stop the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_hidden",
+                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_with_tray",
-                "BotTrayApp.quit_app",
-                "BotTrayApp.restart_bot"
+                "BotTrayApp.run_hidden",
+                "BotTrayApp.quit_app"
               ]
             },
             "restart_bot": {
@@ -660,6 +556,147 @@
           "class_constants": {
             "CREATE_NO_WINDOW": "value"
           }
+        }
+      },
+      "call_graph": {}
+    },
+    ".claude\\settings.json": {
+      "language": "json",
+      "parsed": false,
+      "purpose": "Configuration"
+    },
+    ".claude\\settings.local.json": {
+      "language": "json",
+      "parsed": false,
+      "purpose": "Configuration"
+    },
+    "src\\bot.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "logging",
+        "asyncio",
+        "typing",
+        "datetime",
+        "telegram",
+        "telegram.ext",
+        "telegram.error",
+        ".config",
+        ".utils"
+      ],
+      "functions": {},
+      "classes": {
+        "CCReleaseMonitorBot": {
+          "methods": {
+            "__init__": "(self, config: Config)",
+            "initialize": {
+              "doc": "Initialize the bot application.",
+              "calls": [
+                "_setup_bot_commands",
+                "_setup_handlers"
+              ],
+              "signature": "async (self) -> None",
+              "called_by": [
+                "CCReleaseMonitorBot.start"
+              ]
+            },
+            "_setup_handlers": {
+              "doc": "Set up command and message handlers.",
+              "signature": "async (self) -> None",
+              "called_by": [
+                "CCReleaseMonitorBot.initialize"
+              ]
+            },
+            "_setup_bot_commands": {
+              "doc": "Set up bot commands menu.",
+              "signature": "async (self) -> None",
+              "called_by": [
+                "CCReleaseMonitorBot.initialize"
+              ]
+            },
+            "start_command": {
+              "doc": "Handle /start command.",
+              "calls": [
+                "_send_error_message"
+              ],
+              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+            },
+            "help_command": {
+              "doc": "Handle /help command.",
+              "calls": [
+                "_send_error_message"
+              ],
+              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+            },
+            "status_command": {
+              "doc": "Handle /status command.",
+              "calls": [
+                "_send_error_message"
+              ],
+              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+            },
+            "unknown_command": {
+              "doc": "Handle unknown commands.",
+              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+            },
+            "error_handler": {
+              "doc": "Handle errors that occur during bot operation.",
+              "calls": [
+                "_send_error_message"
+              ],
+              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+            },
+            "_send_error_message": {
+              "doc": "Send error message to user.",
+              "signature": "async (self, update: Update, message: str) -> None",
+              "called_by": [
+                "CCReleaseMonitorBot.error_handler",
+                "CCReleaseMonitorBot.help_command",
+                "CCReleaseMonitorBot.status_command",
+                "CCReleaseMonitorBot.start_command"
+              ]
+            },
+            "start": {
+              "doc": "Start the bot.",
+              "calls": [
+                "initialize"
+              ],
+              "signature": "async (self) -> None",
+              "called_by": [
+                "start_monitoring_command",
+                "post_init",
+                "CCReleaseMonitorBot.run_forever",
+                "main"
+              ]
+            },
+            "stop": {
+              "doc": "Stop the bot gracefully.",
+              "calls": [
+                "stop"
+              ],
+              "signature": "async (self) -> None",
+              "called_by": [
+                "CCReleaseMonitorBot.stop",
+                "CCReleaseMonitorBot.run_forever"
+              ]
+            },
+            "run_forever": {
+              "doc": "Run the bot until interrupted.",
+              "calls": [
+                "start",
+                "stop"
+              ],
+              "signature": "async (self) -> None"
+            },
+            "get_stats": {
+              "doc": "Get bot statistics.",
+              "signature": "(self) -> Dict[str, Any]"
+            }
+          },
+          "doc": "CC Release Monitor Telegram Bot.",
+          "properties": [
+            "config"
+          ]
         }
       },
       "call_graph": {}
@@ -800,511 +837,7 @@
       },
       "call_graph": {}
     },
-    "src\\ipc_server.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "fastapi",
-        "fastapi.middleware.cors",
-        "pydantic",
-        "typing",
-        "uvicorn",
-        "logging",
-        "asyncio",
-        "datetime",
-        "pathlib",
-        "sys",
-        "src.models.approval",
-        "fastapi",
-        "typing"
-      ],
-      "functions": {
-        "root": {
-          "doc": "Health check endpoint.",
-          "signature": "async ()"
-        },
-        "create_approval_request": "async (request: ApprovalRequestModel, background_tasks: BackgroundTasks) -> Dict[str, str]",
-        "get_approval_status": "async (request_id: str) -> ApprovalStatusResponse",
-        "submit_approval_response": "async (response: ApprovalResponseModel) -> Dict[str, str]",
-        "get_pending_approvals": "async (limit: int = 10) -> Dict[str, Any]",
-        "timeout_old_requests": "async (seconds: int = 60) -> Dict[str, int]",
-        "get_approval_statistics": {
-          "doc": "Get statistics about approval requests.",
-          "signature": "async () -> Dict[str, Any]"
-        },
-        "cleanup_old_requests": {
-          "calls": [
-            "cleanup_old_requests"
-          ],
-          "signature": "async (hours: int = 24) -> Dict[str, int]",
-          "called_by": [
-            "cleanup_old_requests",
-            "cleanup_old_requests"
-          ]
-        },
-        "websocket_endpoint": {
-          "doc": "WebSocket endpoint for real-time notifications.",
-          "calls": [
-            "connect",
-            "disconnect"
-          ],
-          "signature": "async (websocket: WebSocket)"
-        },
-        "notify_new_request": {
-          "doc": "Notify connected clients about new approval request.",
-          "calls": [
-            "broadcast"
-          ],
-          "signature": "async (request_id: str)"
-        },
-        "register_notification_callback": {
-          "doc": "Register a callback for new approval requests.",
-          "signature": "(callback)"
-        },
-        "run_server": {
-          "doc": "Run the IPC server.",
-          "signature": "(host: str = \"127.0.0.1\", port: int = 8765)"
-        }
-      },
-      "classes": {
-        "ApprovalRequestModel": {
-          "methods": {},
-          "inherits": [
-            "BaseModel"
-          ],
-          "doc": "Model for incoming approval requests.",
-          "properties": [
-            "session_id",
-            "tool_name",
-            "tool_input"
-          ]
-        },
-        "ApprovalResponseModel": {
-          "methods": {},
-          "inherits": [
-            "BaseModel"
-          ],
-          "doc": "Model for approval responses.",
-          "properties": [
-            "request_id",
-            "decision",
-            "reason",
-            "user_id"
-          ]
-        },
-        "ApprovalStatusResponse": {
-          "methods": {},
-          "inherits": [
-            "BaseModel"
-          ],
-          "doc": "Model for approval status responses.",
-          "properties": [
-            "request_id",
-            "status",
-            "decision",
-            "reason"
-          ]
-        },
-        "ConnectionManager": {
-          "methods": {
-            "__init__": "(self)",
-            "connect": {
-              "signature": "async (self, websocket: WebSocket)",
-              "called_by": [
-                "websocket_endpoint"
-              ]
-            },
-            "disconnect": {
-              "signature": "(self, websocket: WebSocket)",
-              "called_by": [
-                "websocket_endpoint"
-              ]
-            },
-            "broadcast": {
-              "signature": "async (self, message: dict)",
-              "called_by": [
-                "notify_new_request"
-              ]
-            }
-          }
-        }
-      },
-      "call_graph": {}
-    },
-    "$CLAUDE_PROJECT_DIR\\hooks\\remote_approval.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "json",
-        "sys",
-        "time",
-        "requests",
-        "typing",
-        "logging",
-        "pathlib"
-      ],
-      "functions": {
-        "should_require_approval": {
-          "doc": "Determine if a tool use should require approval.",
-          "signature": "(tool_name: str, tool_input: Dict[str, Any]) -> bool",
-          "called_by": [
-            "request_approval",
-            "request_approval"
-          ]
-        },
-        "request_approval": {
-          "doc": "Request approval from remote Telegram bot.",
-          "calls": [
-            "should_require_approval"
-          ],
-          "signature": "(input_data: Dict[str, Any]) -> Dict[str, Any]",
-          "called_by": [
-            "main",
-            "main"
-          ]
-        },
-        "main": {
-          "doc": "Main entry point for the hook.",
-          "calls": [
-            "request_approval"
-          ],
-          "signature": "()",
-          "called_by": [
-            "run_bot"
-          ]
-        }
-      },
-      "classes": {},
-      "constants": {
-        "IPC_SERVER": "str",
-        "TIMEOUT": "number",
-        "POLL_INTERVAL": "number",
-        "SENSITIVE_TOOLS": "collection",
-        "SAFE_TOOLS": "collection"
-      },
-      "call_graph": {}
-    },
-    ".claude\\hooks\\remote_approval.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "json",
-        "sys",
-        "time",
-        "requests",
-        "typing",
-        "logging",
-        "pathlib"
-      ],
-      "functions": {
-        "should_require_approval": {
-          "doc": "Determine if a tool use should require approval.",
-          "signature": "(tool_name: str, tool_input: Dict[str, Any]) -> bool",
-          "called_by": [
-            "request_approval",
-            "request_approval"
-          ]
-        },
-        "request_approval": {
-          "doc": "Request approval from remote Telegram bot.",
-          "calls": [
-            "should_require_approval"
-          ],
-          "signature": "(input_data: Dict[str, Any]) -> Dict[str, Any]",
-          "called_by": [
-            "main",
-            "main"
-          ]
-        },
-        "main": {
-          "doc": "Main entry point for the hook.",
-          "calls": [
-            "request_approval"
-          ],
-          "signature": "()",
-          "called_by": [
-            "run_bot"
-          ]
-        }
-      },
-      "classes": {},
-      "constants": {
-        "IPC_SERVER": "str",
-        "TIMEOUT": "number",
-        "POLL_INTERVAL": "number",
-        "SENSITIVE_TOOLS": "collection",
-        "SAFE_TOOLS": "collection"
-      },
-      "call_graph": {}
-    },
-    "CC-Release-Monitor\\src\\bot.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "logging",
-        "asyncio",
-        "typing",
-        "datetime",
-        "telegram",
-        "telegram.ext",
-        "telegram.error",
-        ".config",
-        ".utils"
-      ],
-      "functions": {},
-      "classes": {
-        "CCReleaseMonitorBot": {
-          "methods": {
-            "__init__": "(self, config: Config)",
-            "initialize": {
-              "doc": "Initialize the bot application.",
-              "calls": [
-                "_setup_bot_commands",
-                "_setup_handlers"
-              ],
-              "signature": "async (self) -> None",
-              "called_by": [
-                "CCReleaseMonitorBot.start"
-              ]
-            },
-            "_setup_handlers": {
-              "doc": "Set up command and message handlers.",
-              "signature": "async (self) -> None",
-              "called_by": [
-                "CCReleaseMonitorBot.initialize"
-              ]
-            },
-            "_setup_bot_commands": {
-              "doc": "Set up bot commands menu.",
-              "signature": "async (self) -> None",
-              "called_by": [
-                "CCReleaseMonitorBot.initialize"
-              ]
-            },
-            "start_command": {
-              "doc": "Handle /start command.",
-              "calls": [
-                "_send_error_message"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-            },
-            "help_command": {
-              "doc": "Handle /help command.",
-              "calls": [
-                "_send_error_message"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-            },
-            "status_command": {
-              "doc": "Handle /status command.",
-              "calls": [
-                "_send_error_message"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-            },
-            "unknown_command": {
-              "doc": "Handle unknown commands.",
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-            },
-            "error_handler": {
-              "doc": "Handle errors that occur during bot operation.",
-              "calls": [
-                "_send_error_message"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-            },
-            "_send_error_message": {
-              "doc": "Send error message to user.",
-              "signature": "async (self, update: Update, message: str) -> None",
-              "called_by": [
-                "CCReleaseMonitorBot.status_command",
-                "CCReleaseMonitorBot.error_handler",
-                "CCReleaseMonitorBot.start_command",
-                "CCReleaseMonitorBot.help_command"
-              ]
-            },
-            "start": {
-              "doc": "Start the bot.",
-              "calls": [
-                "initialize"
-              ],
-              "signature": "async (self) -> None",
-              "called_by": [
-                "start_monitoring_command",
-                "CCReleaseMonitorBot.run_forever",
-                "post_init",
-                "main"
-              ]
-            },
-            "stop": {
-              "doc": "Stop the bot gracefully.",
-              "calls": [
-                "stop"
-              ],
-              "signature": "async (self) -> None",
-              "called_by": [
-                "CCReleaseMonitorBot.run_forever",
-                "CCReleaseMonitorBot.stop"
-              ]
-            },
-            "run_forever": {
-              "doc": "Run the bot until interrupted.",
-              "calls": [
-                "start",
-                "stop"
-              ],
-              "signature": "async (self) -> None"
-            },
-            "get_stats": {
-              "doc": "Get bot statistics.",
-              "signature": "(self) -> Dict[str, Any]"
-            }
-          },
-          "doc": "CC Release Monitor Telegram Bot.",
-          "properties": [
-            "config"
-          ]
-        }
-      },
-      "call_graph": {}
-    },
-    "CC-Release-Monitor\\src\\bot_approval.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "asyncio",
-        "logging",
-        "requests",
-        "typing",
-        "datetime",
-        "telegram",
-        "telegram.ext",
-        "src.models.approval"
-      ],
-      "functions": {
-        "register_approval_handlers": {
-          "doc": "Register approval handlers with the Telegram bot application.",
-          "signature": "(application: Application, config: Any) -> ApprovalHandler"
-        }
-      },
-      "classes": {
-        "ApprovalHandler": {
-          "methods": {
-            "__init__": {
-              "doc": "Initialize the approval handler.",
-              "calls": [
-                "_get_authorized_users"
-              ],
-              "signature": "(self, config: Any, application: Application)"
-            },
-            "_get_authorized_users": {
-              "doc": "Get list of authorized Telegram user IDs from config.",
-              "signature": "(self) -> Set[int]",
-              "called_by": [
-                "ApprovalHandler.__init__"
-              ]
-            },
-            "start_monitoring": {
-              "doc": "Start monitoring for new approval requests.",
-              "calls": [
-                "_monitor_approvals"
-              ],
-              "signature": "async (self)",
-              "called_by": [
-                "ApprovalHandler.start_approval_monitoring_command"
-              ]
-            },
-            "stop_monitoring": {
-              "doc": "Stop monitoring for approval requests.",
-              "signature": "async (self)",
-              "called_by": [
-                "ApprovalHandler.stop_approval_monitoring_command"
-              ]
-            },
-            "_monitor_approvals": {
-              "doc": "Background task to check for new approval requests.",
-              "calls": [
-                "_send_approval_notification"
-              ],
-              "signature": "async (self)",
-              "called_by": [
-                "ApprovalHandler.start_monitoring"
-              ]
-            },
-            "_send_approval_notification": {
-              "doc": "Send approval request notification to authorized users.",
-              "signature": "async (self, request: ApprovalRequest)",
-              "called_by": [
-                "ApprovalHandler._monitor_approvals"
-              ]
-            },
-            "handle_approval_callback": {
-              "doc": "Handle approval/denial button callbacks.",
-              "calls": [
-                "_handle_approve",
-                "_handle_deny",
-                "_handle_deny_with_reason",
-                "_handle_show_details"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE)"
-            },
-            "_handle_approve": {
-              "doc": "Handle approval of a request.",
-              "signature": "async (self, query, request_id: str, user_id: int)",
-              "called_by": [
-                "ApprovalHandler.handle_approval_callback"
-              ]
-            },
-            "_handle_deny": {
-              "doc": "Handle denial of a request.",
-              "signature": "async (self, query, request_id: str, user_id: int, reason: str)",
-              "called_by": [
-                "ApprovalHandler.handle_approval_callback"
-              ]
-            },
-            "_handle_deny_with_reason": {
-              "doc": "Handle denial with custom reason.",
-              "signature": "async (self, query, request_id: str, user_id: int, context: ContextTypes.DEFAULT_TYPE)",
-              "called_by": [
-                "ApprovalHandler.handle_approval_callback"
-              ]
-            },
-            "_handle_show_details": {
-              "doc": "Show detailed information about a request.",
-              "signature": "async (self, query, request_id: str)",
-              "called_by": [
-                "ApprovalHandler.handle_approval_callback"
-              ]
-            },
-            "handle_denial_reason_message": {
-              "doc": "Handle text messages that might be denial reasons.",
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE)"
-            },
-            "approval_status_command": {
-              "doc": "Handle /approval_status command to show statistics.",
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE)"
-            },
-            "start_approval_monitoring_command": {
-              "doc": "Handle /start_approval command.",
-              "calls": [
-                "start_monitoring"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE)"
-            },
-            "stop_approval_monitoring_command": {
-              "doc": "Handle /stop_approval command.",
-              "calls": [
-                "stop_monitoring"
-              ],
-              "signature": "async (self, update: Update, context: ContextTypes.DEFAULT_TYPE)"
-            }
-          },
-          "doc": "Handles approval requests from Claude Code via Telegram."
-        }
-      },
-      "call_graph": {}
-    },
-    "CC-Release-Monitor\\src\\config.py": {
+    "src\\config.py": {
       "language": "python",
       "parsed": true,
       "purpose": "Configuration",
@@ -1458,7 +991,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\github_client.py": {
+    "src\\github_client.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -1514,14 +1047,14 @@
               ],
               "signature": "(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
-                "GitHubClient.get_commits",
-                "GitHubClient.get_latest_release",
                 "GitHubClient.get_release_by_tag",
-                "GitHubClient.get_commit",
-                "GitHubClient.get_releases",
-                "GitHubClient.get_file_content",
-                "GitHubClient.get_file_last_commit",
                 "GitHubClient.compare_commits",
+                "GitHubClient.get_file_last_commit",
+                "GitHubClient.get_releases",
+                "GitHubClient.get_latest_release",
+                "GitHubClient.get_commit",
+                "GitHubClient.get_commits",
+                "GitHubClient.get_file_content",
                 "GitHubClient.get_repository_info"
               ]
             },
@@ -1531,8 +1064,8 @@
               ],
               "signature": "(self) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.fetch_release",
-                "GitHubClient.get_latest_release_async"
+                "GitHubClient.get_latest_release_async",
+                "GitHubClient.fetch_release"
               ]
             },
             "get_releases": {
@@ -1643,8 +1176,8 @@
               ],
               "signature": "(self, file_path: str) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.get_file_last_commit_async",
-                "GitHubClient.fetch_last_commit"
+                "GitHubClient.fetch_last_commit",
+                "GitHubClient.get_file_last_commit_async"
               ]
             },
             "get_file_content": {
@@ -1729,7 +1262,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\ipc_server.py": {
+    "src\\ipc_server.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -1767,7 +1300,6 @@
           ],
           "signature": "async (hours: int = 24) -> Dict[str, int]",
           "called_by": [
-            "cleanup_old_requests",
             "cleanup_old_requests"
           ]
         },
@@ -1860,7 +1392,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\release_parser.py": {
+    "src\\release_parser.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -1911,8 +1443,8 @@
               "signature": "(self, date_string: Optional[str]) -> Optional[datetime]",
               "called_by": [
                 "ReleaseParser._parse_assets",
-                "ReleaseParser.parse_release",
-                "ReleaseParser.parse_commit"
+                "ReleaseParser.parse_commit",
+                "ReleaseParser.parse_release"
               ]
             },
             "_extract_author": {
@@ -2041,7 +1573,7 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\utils.py": {
+    "src\\utils.py": {
       "language": "python",
       "parsed": true,
       "purpose": "Utility functions",
@@ -2081,7 +1613,7 @@
       "classes": {},
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\version_manager.py": {
+    "src\\version_manager.py": {
       "language": "python",
       "parsed": true,
       "imports": [
@@ -2160,11 +1692,11 @@
               "doc": "Save version data to file.",
               "signature": "(self) -> bool",
               "called_by": [
-                "VersionManager.reset_data",
-                "VersionManager.update_changelog",
-                "VersionManager.set_monitoring_active",
                 "VersionManager.update_version",
+                "VersionManager.reset_data",
+                "VersionManager.set_monitoring_active",
                 "VersionManager.mark_notification_sent",
+                "VersionManager.update_changelog",
                 "VersionManager.update_commit"
               ]
             },
@@ -2180,9 +1712,9 @@
               "signature": "(self) -> bool",
               "called_by": [
                 "VersionManager.reset_data",
-                "VersionManager._add_to_history",
+                "VersionManager._add_changelog_to_history",
                 "VersionManager._add_commit_to_history",
-                "VersionManager._add_changelog_to_history"
+                "VersionManager._add_to_history"
               ]
             },
             "_add_to_history": {
@@ -2205,8 +1737,8 @@
               "doc": "Get the last known version.",
               "signature": "(self) -> Optional[str]",
               "called_by": [
-                "VersionManager.is_newer_version",
-                "VersionManager.get_statistics"
+                "VersionManager.get_statistics",
+                "VersionManager.is_newer_version"
               ]
             },
             "get_last_release_data": {
@@ -2377,11 +1909,11 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\src\\__init__.py": {
+    "src\\__init__.py": {
       "language": "python",
       "parsed": false
     },
-    "CC-Release-Monitor\\tests\\test_config.py": {
+    "tests\\test_config.py": {
       "language": "python",
       "parsed": true,
       "purpose": "Test file",
@@ -2425,125 +1957,60 @@
       },
       "call_graph": {}
     },
-    "CC-Release-Monitor\\tests\\__init__.py": {
+    "tests\\__init__.py": {
       "language": "python",
       "parsed": false
     },
-    "CC-Release-Monitor\\src\\models\\approval.py": {
+    ".claude\\hooks\\remote_approval.py": {
       "language": "python",
       "parsed": true,
       "imports": [
-        "sqlite3",
         "json",
-        "uuid",
-        "dataclasses",
-        "datetime",
+        "sys",
+        "time",
+        "requests",
         "typing",
-        "pathlib",
-        "logging"
+        "logging",
+        "pathlib"
       ],
-      "functions": {},
-      "classes": {
-        "ApprovalRequest": {
-          "methods": {
-            "to_dict": {
-              "doc": "Convert to dictionary for JSON serialization.",
-              "signature": "(self) -> Dict[str, Any]"
-            },
-            "from_row": {
-              "decorators": [
-                "classmethod"
-              ],
-              "doc": "Create from database row.",
-              "signature": "(cls, row: tuple) -> 'ApprovalRequest'",
-              "called_by": [
-                "ApprovalQueue.get_pending",
-                "ApprovalQueue.get_request"
-              ]
-            },
-            "format_for_telegram": {
-              "doc": "Format request for Telegram notification.",
-              "signature": "(self) -> str"
-            }
-          },
-          "decorators": [
-            "dataclass"
-          ],
-          "doc": "Represents an approval request from Claude Code.",
-          "properties": [
-            "request_id",
-            "session_id",
-            "timestamp",
-            "tool_name",
-            "tool_input",
-            "status",
-            "response_time",
-            "user_id",
-            "decision_reason"
+      "functions": {
+        "should_require_approval": {
+          "doc": "Determine if a tool use should require approval.",
+          "signature": "(tool_name: str, tool_input: Dict[str, Any]) -> bool",
+          "called_by": [
+            "request_approval"
           ]
         },
-        "ApprovalQueue": {
-          "methods": {
-            "__init__": {
-              "doc": "Initialize the approval queue with database.",
-              "calls": [
-                "_init_db"
-              ],
-              "signature": "(self, db_path: str = \"./data/approvals.db\")"
-            },
-            "_init_db": {
-              "doc": "Create tables if they don't exist.",
-              "signature": "(self)",
-              "called_by": [
-                "ApprovalQueue.__init__"
-              ]
-            },
-            "add_request": {
-              "doc": "Add a new approval request and return its ID.",
-              "signature": "(self, session_id: str, tool_name: str, tool_input: Dict[str, Any]) -> str"
-            },
-            "get_request": {
-              "doc": "Get a specific approval request by ID.",
-              "calls": [
-                "from_row"
-              ],
-              "signature": "(self, request_id: str) -> Optional[ApprovalRequest]"
-            },
-            "get_pending": {
-              "doc": "Get all pending approval requests.",
-              "calls": [
-                "from_row"
-              ],
-              "signature": "(self, limit: int = 10) -> List[ApprovalRequest]"
-            },
-            "update_status": {
-              "doc": "Update the status of an approval request.",
-              "signature": "(self, request_id: str, status: str, user_id: Optional[int] = None, reason: Optional[str] = None) -> bool"
-            },
-            "cleanup_old_requests": {
-              "doc": "Clean up old requests older than specified hours.",
-              "signature": "(self, hours: int = 24)",
-              "called_by": [
-                "cleanup_old_requests"
-              ]
-            },
-            "timeout_pending_requests": {
-              "doc": "Mark old pending requests as timeout.",
-              "signature": "(self, seconds: int = 60)"
-            },
-            "get_statistics": {
-              "doc": "Get statistics about approval requests.",
-              "signature": "(self) -> Dict[str, Any]"
-            }
-          },
-          "doc": "Manages approval requests in SQLite database."
+        "request_approval": {
+          "doc": "Request approval from remote Telegram bot.",
+          "calls": [
+            "should_require_approval"
+          ],
+          "signature": "(input_data: Dict[str, Any]) -> Dict[str, Any]",
+          "called_by": [
+            "main"
+          ]
+        },
+        "main": {
+          "doc": "Main entry point for the hook.",
+          "calls": [
+            "request_approval"
+          ],
+          "signature": "()",
+          "called_by": [
+            "run_bot"
+          ]
         }
       },
+      "classes": {},
+      "constants": {
+        "IPC_SERVER": "str",
+        "TIMEOUT": "number",
+        "POLL_INTERVAL": "number",
+        "SENSITIVE_TOOLS": "collection",
+        "SAFE_TOOLS": "collection"
+      },
       "call_graph": {}
-    },
-    "CC-Release-Monitor\\src\\models\\__init__.py": {
-      "language": "python",
-      "parsed": false
     },
     "src\\models\\approval.py": {
       "language": "python",
@@ -2573,8 +2040,8 @@
               "doc": "Create from database row.",
               "signature": "(cls, row: tuple) -> 'ApprovalRequest'",
               "called_by": [
-                "ApprovalQueue.get_pending",
-                "ApprovalQueue.get_request"
+                "ApprovalQueue.get_request",
+                "ApprovalQueue.get_pending"
               ]
             },
             "format_for_telegram": {
@@ -2684,28 +2151,7 @@
       "requests",
       "requests"
     ],
-    "CC-Release-Monitor\\remote_bot.py": [
-      "logging",
-      "os",
-      "asyncio",
-      "threading",
-      "datetime",
-      "dotenv",
-      "telegram",
-      "telegram.ext",
-      "apscheduler.schedulers.asyncio",
-      "apscheduler.triggers.interval",
-      "src.config",
-      "src.github_client",
-      "src.version_manager",
-      "src.release_parser",
-      "src.utils",
-      "src.bot_approval",
-      "src.ipc_server",
-      "requests",
-      "requests"
-    ],
-    "CC-Release-Monitor\\run.py": [
+    "run.py": [
       "asyncio",
       "signal",
       "sys",
@@ -2715,7 +2161,7 @@
       "src.bot",
       "src.utils"
     ],
-    "CC-Release-Monitor\\simple_bot.py": [
+    "simple_bot.py": [
       "logging",
       "os",
       "asyncio",
@@ -2736,7 +2182,7 @@
       "datetime",
       "datetime"
     ],
-    "CC-Release-Monitor\\tray_bot.py": [
+    "tray_bot.py": [
       "sys",
       "os",
       "subprocess",
@@ -2747,6 +2193,15 @@
       "pystray",
       "PIL"
     ],
+    "src\\bot.py": [
+      "logging",
+      "asyncio",
+      "typing",
+      "datetime",
+      "telegram",
+      "telegram.ext",
+      "telegram.error"
+    ],
     "src\\bot_approval.py": [
       "asyncio",
       "logging",
@@ -2756,6 +2211,22 @@
       "telegram",
       "telegram.ext",
       "src.models.approval"
+    ],
+    "src\\config.py": [
+      "os",
+      "logging",
+      "typing",
+      "pathlib",
+      "dotenv"
+    ],
+    "src\\github_client.py": [
+      "logging",
+      "requests",
+      "time",
+      "typing",
+      "datetime",
+      "urllib.parse",
+      "base64"
     ],
     "src\\ipc_server.py": [
       "fastapi",
@@ -2772,82 +2243,14 @@
       "fastapi",
       "typing"
     ],
-    "$CLAUDE_PROJECT_DIR\\hooks\\remote_approval.py": [
-      "json",
-      "sys",
-      "time",
-      "requests",
-      "typing",
-      "logging",
-      "pathlib"
-    ],
-    ".claude\\hooks\\remote_approval.py": [
-      "json",
-      "sys",
-      "time",
-      "requests",
-      "typing",
-      "logging",
-      "pathlib"
-    ],
-    "CC-Release-Monitor\\src\\bot.py": [
-      "logging",
-      "asyncio",
-      "typing",
-      "datetime",
-      "telegram",
-      "telegram.ext",
-      "telegram.error"
-    ],
-    "CC-Release-Monitor\\src\\bot_approval.py": [
-      "asyncio",
-      "logging",
-      "requests",
-      "typing",
-      "datetime",
-      "telegram",
-      "telegram.ext",
-      "src.models.approval"
-    ],
-    "CC-Release-Monitor\\src\\config.py": [
-      "os",
-      "logging",
-      "typing",
-      "pathlib",
-      "dotenv"
-    ],
-    "CC-Release-Monitor\\src\\github_client.py": [
-      "logging",
-      "requests",
-      "time",
-      "typing",
-      "datetime",
-      "urllib.parse",
-      "base64"
-    ],
-    "CC-Release-Monitor\\src\\ipc_server.py": [
-      "fastapi",
-      "fastapi.middleware.cors",
-      "pydantic",
-      "typing",
-      "uvicorn",
-      "logging",
-      "asyncio",
-      "datetime",
-      "pathlib",
-      "sys",
-      "src.models.approval",
-      "fastapi",
-      "typing"
-    ],
-    "CC-Release-Monitor\\src\\release_parser.py": [
+    "src\\release_parser.py": [
       "logging",
       "re",
       "typing",
       "datetime",
       "urllib.parse"
     ],
-    "CC-Release-Monitor\\src\\utils.py": [
+    "src\\utils.py": [
       "os",
       "json",
       "logging",
@@ -2859,7 +2262,7 @@
       "re",
       "re"
     ],
-    "CC-Release-Monitor\\src\\version_manager.py": [
+    "src\\version_manager.py": [
       "logging",
       "re",
       "typing",
@@ -2867,21 +2270,20 @@
       "datetime",
       "hashlib"
     ],
-    "CC-Release-Monitor\\tests\\test_config.py": [
+    "tests\\test_config.py": [
       "pytest",
       "os",
       "unittest.mock",
       "src.config"
     ],
-    "CC-Release-Monitor\\src\\models\\approval.py": [
-      "sqlite3",
+    ".claude\\hooks\\remote_approval.py": [
       "json",
-      "uuid",
-      "dataclasses",
-      "datetime",
+      "sys",
+      "time",
+      "requests",
       "typing",
-      "pathlib",
-      "logging"
+      "logging",
+      "pathlib"
     ],
     "src\\models\\approval.py": [
       "sqlite3",
@@ -2894,5 +2296,5 @@
       "logging"
     ]
   },
-  "staleness_check": 1755007771.987127
+  "staleness_check": 1755010079.435682
 }

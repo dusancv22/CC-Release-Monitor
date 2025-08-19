@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 
 # Configure logging
-log_file = Path.home() / ".claude" / "hooks" / "remote_approval.log"
+log_file = Path(__file__).parent / "remote_approval.log"
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
