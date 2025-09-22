@@ -47,7 +47,11 @@
       "Bash(then cp CC-Release-Monitor/.env .)",
       "Bash(else echo \".env already exists at root\")",
       "Bash(set)",
-      "Task"
+      "Task",
+      "Bash(taskkill:*)",
+      "Bash(wmic:*)",
+      "Bash(powershell:*)",
+      "Bash(venv/Scripts/python.exe:*)"
     ],
     "deny": []
   }

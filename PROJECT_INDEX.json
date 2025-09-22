@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2025-08-19T16:47:58.704913",
+  "indexed_at": "2025-09-22T15:34:36.832849",
   "root": ".",
   "project_structure": {
     "type": "tree",
@@ -495,8 +495,8 @@
               "doc": "Start the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_with_tray",
+                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_hidden"
               ]
             },
@@ -508,10 +508,10 @@
               "doc": "Stop the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_with_tray",
-                "BotTrayApp.run_hidden",
-                "BotTrayApp.quit_app"
+                "BotTrayApp.restart_bot",
+                "BotTrayApp.quit_app",
+                "BotTrayApp.run_hidden"
               ]
             },
             "restart_bot": {
@@ -651,8 +651,8 @@
               "signature": "async (self, update: Update, message: str) -> None",
               "called_by": [
                 "CCReleaseMonitorBot.error_handler",
-                "CCReleaseMonitorBot.help_command",
                 "CCReleaseMonitorBot.status_command",
+                "CCReleaseMonitorBot.help_command",
                 "CCReleaseMonitorBot.start_command"
               ]
             },
@@ -663,10 +663,10 @@
               ],
               "signature": "async (self) -> None",
               "called_by": [
-                "start_monitoring_command",
+                "main",
                 "post_init",
                 "CCReleaseMonitorBot.run_forever",
-                "main"
+                "start_monitoring_command"
               ]
             },
             "stop": {
@@ -1047,15 +1047,15 @@
               ],
               "signature": "(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
-                "GitHubClient.get_release_by_tag",
-                "GitHubClient.compare_commits",
-                "GitHubClient.get_file_last_commit",
-                "GitHubClient.get_releases",
                 "GitHubClient.get_latest_release",
+                "GitHubClient.get_releases",
                 "GitHubClient.get_commit",
                 "GitHubClient.get_commits",
+                "GitHubClient.compare_commits",
+                "GitHubClient.get_repository_info",
                 "GitHubClient.get_file_content",
-                "GitHubClient.get_repository_info"
+                "GitHubClient.get_file_last_commit",
+                "GitHubClient.get_release_by_tag"
               ]
             },
             "get_latest_release": {
@@ -1064,8 +1064,8 @@
               ],
               "signature": "(self) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.get_latest_release_async",
-                "GitHubClient.fetch_release"
+                "GitHubClient.fetch_release",
+                "GitHubClient.get_latest_release_async"
               ]
             },
             "get_releases": {
@@ -1186,8 +1186,8 @@
               ],
               "signature": "(self, file_path: str, branch: str = None) -> Optional[str]",
               "called_by": [
-                "GitHubClient.get_file_content_async",
-                "GitHubClient.fetch_file_content"
+                "GitHubClient.fetch_file_content",
+                "GitHubClient.get_file_content_async"
               ]
             },
             "get_file_last_commit_async": {
@@ -1337,7 +1337,8 @@
           "properties": [
             "session_id",
             "tool_name",
-            "tool_input"
+            "tool_input",
+            "project_dir"
           ]
         },
         "ApprovalResponseModel": {
@@ -1692,12 +1693,12 @@
               "doc": "Save version data to file.",
               "signature": "(self) -> bool",
               "called_by": [
+                "VersionManager.set_monitoring_active",
+                "VersionManager.update_commit",
+                "VersionManager.mark_notification_sent",
                 "VersionManager.update_version",
                 "VersionManager.reset_data",
-                "VersionManager.set_monitoring_active",
-                "VersionManager.mark_notification_sent",
-                "VersionManager.update_changelog",
-                "VersionManager.update_commit"
+                "VersionManager.update_changelog"
               ]
             },
             "_load_history": {
@@ -1711,10 +1712,10 @@
               "doc": "Save version history to file.",
               "signature": "(self) -> bool",
               "called_by": [
+                "VersionManager._add_to_history",
                 "VersionManager.reset_data",
-                "VersionManager._add_changelog_to_history",
                 "VersionManager._add_commit_to_history",
-                "VersionManager._add_to_history"
+                "VersionManager._add_changelog_to_history"
               ]
             },
             "_add_to_history": {
@@ -2062,7 +2063,8 @@
             "status",
             "response_time",
             "user_id",
-            "decision_reason"
+            "decision_reason",
+            "project_dir"
           ]
         },
         "ApprovalQueue": {
@@ -2083,7 +2085,7 @@
             },
             "add_request": {
               "doc": "Add a new approval request and return its ID.",
-              "signature": "(self, session_id: str, tool_name: str, tool_input: Dict[str, Any]) -> str"
+              "signature": "(self, session_id: str, tool_name: str, tool_input: Dict[str, Any], project_dir: Optional[str] = None) -> str"
             },
             "get_request": {
               "doc": "Get a specific approval request by ID.",
@@ -2296,5 +2298,5 @@
       "logging"
     ]
   },
-  "staleness_check": 1755010079.435682
+  "staleness_check": 1757943277.666801
 }

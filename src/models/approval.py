@@ -25,6 +25,7 @@ class ApprovalRequest:
     response_time: Optional[datetime] = None
     user_id: Optional[int] = None
     decision_reason: Optional[str] = None
+    project_dir: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
@@ -46,7 +47,8 @@ class ApprovalRequest:
             status=row[5],
             response_time=datetime.fromisoformat(row[6]) if row[6] else None,
             user_id=row[7],
-            decision_reason=row[8]
+            decision_reason=row[8],
+            project_dir=row[9] if len(row) > 9 else None
         )
     
     def format_for_telegram(self) -> str:
@@ -73,7 +75,13 @@ class ApprovalRequest:
             message += f"**Tool:** {self.tool_name}\n"
             message += f"**Details:** `{str(self.tool_input)[:100]}...`\n"
         
-        message += f"\n**Session:** `{self.session_id[:8]}...`\n"
+        # Add project directory if available
+        if self.project_dir:
+            # Extract just the project name from the full path
+            project_name = Path(self.project_dir).name
+            message += f"\n**Project:** 📁 `{project_name}`\n"
+        
+        message += f"**Session:** `{self.session_id[:8]}...`\n"
         message += f"**Time:** {self.timestamp.strftime('%H:%M:%S')}\n"
         message += f"**Request ID:** `{self.request_id[:8]}...`"
         
@@ -103,9 +111,18 @@ class ApprovalQueue:
                     response_time TEXT,
                     user_id INTEGER,
                     decision_reason TEXT,
+                    project_dir TEXT,
                     CHECK (status IN ('pending', 'approved', 'denied', 'timeout'))
                 )
             """)
+            
+            # Add project_dir column if it doesn't exist (for migration)
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA table_info(approval_requests)")
+            columns = [column[1] for column in cursor.fetchall()]
+            if 'project_dir' not in columns:
+                conn.execute("ALTER TABLE approval_requests ADD COLUMN project_dir TEXT")
+                logger.info("Added project_dir column to approval_requests table")
             
             # Create indices for efficient queries
             conn.execute("""
@@ -125,7 +142,7 @@ class ApprovalQueue:
             logger.info(f"Initialized approval database at {self.db_path}")
     
     def add_request(self, session_id: str, tool_name: str, 
-                   tool_input: Dict[str, Any]) -> str:
+                   tool_input: Dict[str, Any], project_dir: Optional[str] = None) -> str:
         """Add a new approval request and return its ID."""
         request_id = str(uuid.uuid4())
         timestamp = datetime.now()
@@ -135,21 +152,23 @@ class ApprovalQueue:
             session_id=session_id,
             timestamp=timestamp,
             tool_name=tool_name,
-            tool_input=tool_input
+            tool_input=tool_input,
+            project_dir=project_dir
         )
         
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("""
                 INSERT INTO approval_requests 
-                (request_id, session_id, timestamp, tool_name, tool_input, status)
-                VALUES (?, ?, ?, ?, ?, ?)
+                (request_id, session_id, timestamp, tool_name, tool_input, status, project_dir)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (
                 request.request_id,
                 request.session_id,
                 request.timestamp.isoformat(),
                 request.tool_name,
                 json.dumps(request.tool_input),
-                request.status
+                request.status,
+                request.project_dir
             ))
             conn.commit()
         

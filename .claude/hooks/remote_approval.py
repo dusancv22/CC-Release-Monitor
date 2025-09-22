@@ -91,6 +91,7 @@ def request_approval(input_data: Dict[str, Any]) -> Dict[str, Any]:
     session_id = input_data.get("session_id", "unknown")
     tool_name = input_data.get("tool_name", "")
     tool_input = input_data.get("tool_input", {})
+    project_dir = input_data.get("cwd", "Unknown Project")
     
     logger.info(f"Processing {tool_name} request for session {session_id[:8]}...")
     
@@ -107,7 +108,8 @@ def request_approval(input_data: Dict[str, Any]) -> Dict[str, Any]:
             json={
                 "session_id": session_id,
                 "tool_name": tool_name,
-                "tool_input": tool_input
+                "tool_input": tool_input,
+                "project_dir": project_dir
             },
             timeout=5
         )

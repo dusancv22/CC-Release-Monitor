@@ -42,6 +42,7 @@ class ApprovalRequestModel(BaseModel):
     session_id: str
     tool_name: str
     tool_input: Dict[str, Any]
+    project_dir: Optional[str] = None
 
 
 class ApprovalResponseModel(BaseModel):
@@ -84,7 +85,8 @@ async def create_approval_request(
         request_id = approval_queue.add_request(
             session_id=request.session_id,
             tool_name=request.tool_name,
-            tool_input=request.tool_input
+            tool_input=request.tool_input,
+            project_dir=request.project_dir
         )
         
         # Trigger notification callbacks in background
@@ -187,7 +189,8 @@ async def get_pending_approvals(limit: int = 10) -> Dict[str, Any]:
                     "session_id": req.session_id,
                     "tool_name": req.tool_name,
                     "tool_input": req.tool_input,
-                    "timestamp": req.timestamp.isoformat()
+                    "timestamp": req.timestamp.isoformat(),
+                    "project_dir": req.project_dir
                 }
                 for req in pending
             ]

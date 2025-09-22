@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackQueryHandler, 
+    CommandHandler,
     MessageHandler,
     filters,
     ContextTypes,
@@ -116,7 +117,8 @@ class ApprovalHandler:
                             session_id=req_data["session_id"],
                             timestamp=datetime.fromisoformat(req_data["timestamp"]),
                             tool_name=req_data["tool_name"],
-                            tool_input=req_data["tool_input"]
+                            tool_input=req_data["tool_input"],
+                            project_dir=req_data.get("project_dir")
                         )
                         
                         # Send notification
@@ -452,22 +454,13 @@ def register_approval_handlers(application: Application, config: Any) -> Approva
     
     # Register command handlers
     application.add_handler(
-        MessageHandler(
-            filters.Command("approval_status"),
-            handler.approval_status_command
-        )
+        CommandHandler("approval_status", handler.approval_status_command)
     )
     application.add_handler(
-        MessageHandler(
-            filters.Command("start_approval"),
-            handler.start_approval_monitoring_command
-        )
+        CommandHandler("start_approval", handler.start_approval_monitoring_command)
     )
     application.add_handler(
-        MessageHandler(
-            filters.Command("stop_approval"),
-            handler.stop_approval_monitoring_command
-        )
+        CommandHandler("stop_approval", handler.stop_approval_monitoring_command)
     )
     
     # Register callback query handler

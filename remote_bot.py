@@ -80,10 +80,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "• `/status` - Show bot status\n"
         "• `/version` - Show version info\n\n"
         
-        f"Your Chat ID: `{chat_id}` (add to AUTHORIZED_USERS in .env)"
+        f"Your Chat ID: `{chat_id}` - add this to AUTHORIZED_USERS in .env"
     )
     
-    await update.message.reply_text(welcome_message, parse_mode='Markdown')
+    await update.message.reply_text(welcome_message)
     logger.info(f"Bot started for chat {chat_id}")
 
 
