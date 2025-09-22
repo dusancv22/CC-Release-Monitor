@@ -1,16 +1,18 @@
 {
-  "indexed_at": "2025-09-22T15:42:31.663578",
+  "indexed_at": "2025-09-22T22:11:20.486886",
   "root": ".",
   "project_structure": {
     "type": "tree",
     "root": ".",
     "tree": [
       ".",
-      "+-- data/",
+      "+-- data/ (2 files)",
+      "|   +-- claude_code/ (2 files)",
+      "|   +-- codex/",
       "+-- docs/",
       "+-- images/",
       "+-- logs/",
-      "+-- src/ (11 files)",
+      "+-- src/ (12 files)",
       "|   +-- models/ (2 files)",
       "+-- tests/ (2 files)",
       "+-- README.md",
@@ -175,10 +177,10 @@
     "src\\models": "Data models and database schemas"
   },
   "stats": {
-    "total_files": 21,
-    "total_directories": 9,
+    "total_files": 22,
+    "total_directories": 11,
     "fully_parsed": {
-      "python": 18
+      "python": 19
     },
     "listed_only": {
       "json": 3
@@ -221,7 +223,6 @@
           "called_by": [
             "start_monitoring_command",
             "post_init",
-            "main",
             "CCReleaseMonitorBot.run_forever"
           ]
         },
@@ -267,7 +268,6 @@
           ],
           "signature": "async (application: Application) -> None",
           "called_by": [
-            "main",
             "main"
           ]
         },
@@ -352,84 +352,151 @@
         "dotenv",
         "telegram",
         "telegram.ext",
-        "apscheduler.schedulers.asyncio",
-        "apscheduler.triggers.interval",
         "src.config",
         "src.github_client",
         "src.version_manager",
         "src.release_parser",
         "src.utils",
-        "datetime",
+        "src.repository_manager",
         "datetime",
         "datetime",
         "datetime",
         "datetime"
       ],
       "functions": {
+        "get_github_client": {
+          "doc": "Get or create a GitHub client for a specific repository.",
+          "signature": "(repo_key: str) -> GitHubClient",
+          "called_by": [
+            "status",
+            "check_command",
+            "latest_command",
+            "commits_command",
+            "commit_command",
+            "changelog_command",
+            "changelog_latest_command"
+          ]
+        },
+        "get_version_manager": {
+          "doc": "Get or create a version manager for a specific repository.",
+          "signature": "(repo_key: str) -> VersionManager",
+          "called_by": [
+            "status",
+            "check_command",
+            "latest_command",
+            "commits_command"
+          ]
+        },
+        "is_authorized_user": {
+          "doc": "Return True if the incoming update is from an allowed user.",
+          "signature": "(update: Update) -> bool"
+        },
+        "handle_unauthorized_message": {
+          "doc": "Notify and log when someone outside the allow-list contacts the bot.",
+          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+        },
+        "get_repository_keyboard": {
+          "doc": "Create an inline keyboard for repository selection.",
+          "signature": "() -> InlineKeyboardMarkup",
+          "called_by": [
+            "start",
+            "switch_command"
+          ]
+        },
+        "get_current_repo_text": {
+          "doc": "Get text showing the currently selected repository.",
+          "signature": "(user_id: int) -> str",
+          "called_by": [
+            "help_command",
+            "status"
+          ]
+        },
         "start": {
           "doc": "Send a message when the command /start is issued.",
+          "calls": [
+            "get_repository_keyboard"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None",
           "called_by": [
             "start_monitoring_command",
             "post_init",
-            "main",
             "CCReleaseMonitorBot.run_forever"
           ]
         },
         "help_command": {
           "doc": "Send a message when the command /help is issued.",
+          "calls": [
+            "get_current_repo_text"
+          ],
+          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+        },
+        "switch_command": {
+          "doc": "Switch to a different repository.",
+          "calls": [
+            "get_repository_keyboard"
+          ],
+          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
+        },
+        "handle_repository_selection": {
+          "doc": "Handle repository selection from inline keyboard.",
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "status": {
           "doc": "Send bot status information.",
+          "calls": [
+            "get_current_repo_text",
+            "get_github_client",
+            "get_version_manager"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "check_command": {
           "doc": "Manually check for new releases.",
+          "calls": [
+            "get_github_client",
+            "get_version_manager"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "latest_command": {
           "doc": "Show information about the latest release.",
+          "calls": [
+            "get_github_client",
+            "get_version_manager"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "commits_command": {
           "doc": "Show recent commits from the repository.",
+          "calls": [
+            "get_github_client",
+            "get_version_manager"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "commit_command": {
           "doc": "Show detailed information about a specific commit.",
+          "calls": [
+            "get_github_client"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "changelog_command": {
           "doc": "Show recent CHANGELOG.md updates.",
+          "calls": [
+            "get_github_client"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "changelog_latest_command": {
           "doc": "Show only the latest CHANGELOG.md entry.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "version_command": {
-          "doc": "Show version management information.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "periodic_monitoring": {
-          "doc": "Periodic monitoring function that runs in background.",
-          "signature": "async () -> None"
-        },
-        "start_monitoring_command": {
-          "doc": "Start automatic monitoring.",
-          "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
-        },
-        "stop_monitoring_command": {
-          "doc": "Stop automatic monitoring.",
+          "calls": [
+            "get_github_client"
+          ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "main": {
           "doc": "Start the bot.",
-          "calls": [
-            "post_init",
-            "start"
-          ],
           "signature": "() -> None",
           "called_by": [
             "run_bot"
@@ -438,7 +505,9 @@
       },
       "classes": {},
       "constants": {
-        "BOT_TOKEN": "value"
+        "BOT_TOKEN": "value",
+        "AUTHORIZED_USER_IDS": "value",
+        "PRIVATE_CHAT_FILTER": "value"
       },
       "call_graph": {}
     },
@@ -484,6 +553,23 @@
                 "BotTrayApp.__init__"
               ]
             },
+            "_candidate_python_paths": {
+              "doc": "Yield possible Python executables to run the bot",
+              "signature": "(self)",
+              "called_by": [
+                "BotTrayApp.resolve_python_executable"
+              ]
+            },
+            "resolve_python_executable": {
+              "doc": "Determine which Python executable should launch the bot",
+              "calls": [
+                "_candidate_python_paths"
+              ],
+              "signature": "(self)",
+              "called_by": [
+                "BotTrayApp.start_bot"
+              ]
+            },
             "create_icon_image": {
               "doc": "Create a simple icon for the system tray",
               "signature": "(self)",
@@ -493,11 +579,14 @@
             },
             "start_bot": {
               "doc": "Start the bot process",
+              "calls": [
+                "resolve_python_executable"
+              ],
               "signature": "(self, icon=None, item=None)",
               "called_by": [
                 "BotTrayApp.run_hidden",
-                "BotTrayApp.restart_bot",
-                "BotTrayApp.run_with_tray"
+                "BotTrayApp.run_with_tray",
+                "BotTrayApp.restart_bot"
               ]
             },
             "_monitor_bot_process": {
@@ -508,10 +597,10 @@
               "doc": "Stop the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_hidden",
-                "BotTrayApp.restart_bot",
                 "BotTrayApp.run_with_tray",
-                "BotTrayApp.quit_app"
+                "BotTrayApp.run_hidden",
+                "BotTrayApp.quit_app",
+                "BotTrayApp.restart_bot"
               ]
             },
             "restart_bot": {
@@ -650,10 +739,10 @@
               "doc": "Send error message to user.",
               "signature": "async (self, update: Update, message: str) -> None",
               "called_by": [
-                "CCReleaseMonitorBot.help_command",
-                "CCReleaseMonitorBot.error_handler",
+                "CCReleaseMonitorBot.status_command",
                 "CCReleaseMonitorBot.start_command",
-                "CCReleaseMonitorBot.status_command"
+                "CCReleaseMonitorBot.help_command",
+                "CCReleaseMonitorBot.error_handler"
               ]
             },
             "start": {
@@ -663,10 +752,9 @@
               ],
               "signature": "async (self) -> None",
               "called_by": [
-                "main",
+                "CCReleaseMonitorBot.run_forever",
                 "start_monitoring_command",
-                "post_init",
-                "CCReleaseMonitorBot.run_forever"
+                "post_init"
               ]
             },
             "stop": {
@@ -896,11 +984,8 @@
               "signature": "(self) -> Optional[str]"
             },
             "github_repo": {
-              "decorators": [
-                "property"
-              ],
-              "doc": "Get GitHub repository to monitor.",
-              "signature": "(self) -> str"
+              "doc": "Set GitHub repository to monitor.",
+              "signature": "(self, value: str) -> None"
             },
             "log_level": {
               "decorators": [
@@ -959,11 +1044,15 @@
               "signature": "(self) -> str"
             },
             "data_directory": {
+              "doc": "Set data directory path.",
+              "signature": "(self, value: str) -> None"
+            },
+            "authorized_user_ids": {
               "decorators": [
                 "property"
               ],
-              "doc": "Get data directory path.",
-              "signature": "(self) -> str"
+              "doc": "List of Telegram user IDs permitted to use the bot.",
+              "signature": "(self) -> List[int]"
             },
             "log_directory": {
               "decorators": [
@@ -984,6 +1073,7 @@
           "doc": "Configuration manager for the CC Release Monitor.",
           "properties": [
             "env_file",
+            "ids",
             "key",
             "default"
           ]
@@ -1048,14 +1138,14 @@
               "signature": "(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
                 "GitHubClient.get_releases",
-                "GitHubClient.get_latest_release",
-                "GitHubClient.get_commit",
-                "GitHubClient.get_release_by_tag",
                 "GitHubClient.get_file_last_commit",
                 "GitHubClient.compare_commits",
-                "GitHubClient.get_file_content",
+                "GitHubClient.get_release_by_tag",
+                "GitHubClient.get_commit",
+                "GitHubClient.get_latest_release",
                 "GitHubClient.get_repository_info",
-                "GitHubClient.get_commits"
+                "GitHubClient.get_commits",
+                "GitHubClient.get_file_content"
               ]
             },
             "get_latest_release": {
@@ -1064,8 +1154,8 @@
               ],
               "signature": "(self) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.fetch_release",
-                "GitHubClient.get_latest_release_async"
+                "GitHubClient.get_latest_release_async",
+                "GitHubClient.fetch_release"
               ]
             },
             "get_releases": {
@@ -1176,8 +1266,8 @@
               ],
               "signature": "(self, file_path: str) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.get_file_last_commit_async",
-                "GitHubClient.fetch_last_commit"
+                "GitHubClient.fetch_last_commit",
+                "GitHubClient.get_file_last_commit_async"
               ]
             },
             "get_file_content": {
@@ -1186,8 +1276,8 @@
               ],
               "signature": "(self, file_path: str, branch: str = None) -> Optional[str]",
               "called_by": [
-                "GitHubClient.fetch_file_content",
-                "GitHubClient.get_file_content_async"
+                "GitHubClient.get_file_content_async",
+                "GitHubClient.fetch_file_content"
               ]
             },
             "get_file_last_commit_async": {
@@ -1443,9 +1533,9 @@
               "doc": "Parse ISO date string to datetime object.",
               "signature": "(self, date_string: Optional[str]) -> Optional[datetime]",
               "called_by": [
-                "ReleaseParser.parse_commit",
                 "ReleaseParser._parse_assets",
-                "ReleaseParser.parse_release"
+                "ReleaseParser.parse_release",
+                "ReleaseParser.parse_commit"
               ]
             },
             "_extract_author": {
@@ -1574,6 +1664,96 @@
       },
       "call_graph": {}
     },
+    "src\\repository_manager.py": {
+      "language": "python",
+      "parsed": true,
+      "imports": [
+        "typing",
+        "dataclasses",
+        "logging"
+      ],
+      "functions": {},
+      "classes": {
+        "Repository": {
+          "methods": {
+            "full_name": {
+              "decorators": [
+                "property"
+              ],
+              "doc": "Get the full repository name (owner/name).",
+              "signature": "(self) -> str"
+            },
+            "short_name": {
+              "decorators": [
+                "property"
+              ],
+              "doc": "Get a short identifier for the repository.",
+              "signature": "(self) -> str"
+            }
+          },
+          "decorators": [
+            "dataclass"
+          ],
+          "doc": "Repository configuration.",
+          "properties": [
+            "owner",
+            "name",
+            "display_name",
+            "description"
+          ]
+        },
+        "RepositoryManager": {
+          "methods": {
+            "__init__": {
+              "doc": "Initialize the repository manager.",
+              "signature": "(self)"
+            },
+            "get_repository": {
+              "doc": "Get repository by key.",
+              "signature": "(self, repo_key: str) -> Optional[Repository]",
+              "called_by": [
+                "RepositoryManager.get_repository_display_info"
+              ]
+            },
+            "get_user_repository": {
+              "doc": "Get the currently selected repository for a user.",
+              "calls": [
+                "get_user_repo_key"
+              ],
+              "signature": "(self, user_id: int) -> Repository"
+            },
+            "get_user_repo_key": {
+              "doc": "Get the repository key for a user (with default).",
+              "signature": "(self, user_id: int) -> str",
+              "called_by": [
+                "RepositoryManager.get_user_repository"
+              ]
+            },
+            "set_user_repository": {
+              "doc": "Set the selected repository for a user.",
+              "signature": "(self, user_id: int, repo_key: str) -> bool"
+            },
+            "get_available_repositories": {
+              "doc": "Get all available repositories.",
+              "signature": "(self) -> Dict[str, Repository]"
+            },
+            "get_repository_display_info": {
+              "doc": "Get display name and description for a repository.",
+              "calls": [
+                "get_repository"
+              ],
+              "signature": "(self, repo_key: str) -> Tuple[str, str]"
+            },
+            "clear_user_selection": {
+              "doc": "Clear the repository selection for a user.",
+              "signature": "(self, user_id: int) -> None"
+            }
+          },
+          "doc": "Manages repository selection and user context."
+        }
+      },
+      "call_graph": {}
+    },
     "src\\utils.py": {
       "language": "python",
       "parsed": true,
@@ -1693,12 +1873,12 @@
               "doc": "Save version data to file.",
               "signature": "(self) -> bool",
               "called_by": [
+                "VersionManager.set_monitoring_active",
                 "VersionManager.reset_data",
                 "VersionManager.mark_notification_sent",
                 "VersionManager.update_version",
-                "VersionManager.set_monitoring_active",
-                "VersionManager.update_changelog",
-                "VersionManager.update_commit"
+                "VersionManager.update_commit",
+                "VersionManager.update_changelog"
               ]
             },
             "_load_history": {
@@ -1712,9 +1892,9 @@
               "doc": "Save version history to file.",
               "signature": "(self) -> bool",
               "called_by": [
+                "VersionManager._add_commit_to_history",
                 "VersionManager._add_changelog_to_history",
                 "VersionManager.reset_data",
-                "VersionManager._add_commit_to_history",
                 "VersionManager._add_to_history"
               ]
             },
@@ -2171,14 +2351,12 @@
       "dotenv",
       "telegram",
       "telegram.ext",
-      "apscheduler.schedulers.asyncio",
-      "apscheduler.triggers.interval",
       "src.config",
       "src.github_client",
       "src.version_manager",
       "src.release_parser",
       "src.utils",
-      "datetime",
+      "src.repository_manager",
       "datetime",
       "datetime",
       "datetime",
@@ -2252,6 +2430,11 @@
       "datetime",
       "urllib.parse"
     ],
+    "src\\repository_manager.py": [
+      "typing",
+      "dataclasses",
+      "logging"
+    ],
     "src\\utils.py": [
       "os",
       "json",
@@ -2298,5 +2481,5 @@
       "logging"
     ]
   },
-  "staleness_check": 1757943752.329258
+  "staleness_check": 1757967081.536462
 }

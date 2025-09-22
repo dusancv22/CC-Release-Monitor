@@ -37,7 +37,7 @@ class GitHubClient:
         """
         self.config = config
         self.base_url = "https://api.github.com"
-        self.repo = config.get("GITHUB_REPO", "anthropics/claude-code")
+        self.repo = config.github_repo
         self.session = requests.Session()
         
         # Set up headers

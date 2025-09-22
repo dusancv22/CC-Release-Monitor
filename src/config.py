@@ -20,7 +20,7 @@ class Config:
     def __init__(self, env_file: Optional[str] = None):
         """
         Initialize configuration.
-        
+
         Args:
             env_file: Path to .env file. If None, uses default .env
         """
@@ -29,7 +29,11 @@ class Config:
             load_dotenv(env_file)
         else:
             load_dotenv()
-        
+
+        # Store as instance variables so they can be overridden
+        self._github_repo = os.getenv("GITHUB_REPO", "anthropics/claude-code")
+        self._data_directory = os.path.abspath(os.getenv("DATA_DIRECTORY", "./data"))
+
         self._validate_required_config()
         self._setup_directories()
     
@@ -71,7 +75,12 @@ class Config:
     @property
     def github_repo(self) -> str:
         """Get GitHub repository to monitor."""
-        return os.getenv("GITHUB_REPO", "anthropics/claude-code")
+        return self._github_repo
+
+    @github_repo.setter
+    def github_repo(self, value: str) -> None:
+        """Set GitHub repository to monitor."""
+        self._github_repo = value
     
     @property
     def log_level(self) -> str:
@@ -146,7 +155,12 @@ class Config:
     @property
     def data_directory(self) -> str:
         """Get data directory path."""
-        return os.path.abspath(os.getenv("DATA_DIRECTORY", "./data"))
+        return self._data_directory
+
+    @data_directory.setter
+    def data_directory(self, value: str) -> None:
+        """Set data directory path."""
+        self._data_directory = os.path.abspath(value)
     
     @property
     def authorized_user_ids(self) -> List[int]:
