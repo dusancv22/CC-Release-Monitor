@@ -10,7 +10,7 @@ import asyncio
 from datetime import datetime
 from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
@@ -44,6 +44,34 @@ BOT_TOKEN = config.telegram_bot_token
 # Global scheduler and application reference
 scheduler = None
 bot_application = None
+# Authorized users (empty list means open access)
+AUTHORIZED_USER_IDS = config.authorized_user_ids
+
+# Restrict bot commands to private chats and optionally specific users
+PRIVATE_CHAT_FILTER = filters.ChatType.PRIVATE
+if AUTHORIZED_USER_IDS:
+    COMMAND_ACCESS_FILTER = PRIVATE_CHAT_FILTER & filters.User(AUTHORIZED_USER_IDS)
+else:
+    COMMAND_ACCESS_FILTER = PRIVATE_CHAT_FILTER
+
+def is_authorized_user(update: Update) -> bool:
+    """Return True if the incoming update is from an allowed user."""
+    if not AUTHORIZED_USER_IDS:
+        return True
+    user = update.effective_user
+    return bool(user and user.id in AUTHORIZED_USER_IDS)
+
+async def handle_unauthorized_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Notify and log when someone outside the allow-list contacts the bot."""
+    user = update.effective_user
+    user_info = f"id={getattr(user, 'id', 'unknown')} username={getattr(user, 'username', 'n/a')}"
+    logger.warning("Blocked message from unauthorized user: %s", user_info)
+    if update.message:
+        await update.message.reply_text(
+            "Sorry, this bot is private. If you believe this is a mistake, contact the owner.",
+            quote=False
+        )
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued."""
@@ -1215,6 +1243,11 @@ def main() -> None:
     print(f"GitHub API: {'Authenticated' if config.github_api_token else 'Anonymous (rate limited)'}")
     print(f"Data Directory: {config.data_directory}")
     print(f"Check Interval: {config.check_interval_minutes} minutes")
+    if AUTHORIZED_USER_IDS:
+        print("Authorized users: " + ", ".join(str(uid) for uid in AUTHORIZED_USER_IDS))
+    else:
+        print("Authorized users: open (no allow-list configured)")
+
     
     # Create the Application without job_queue to avoid weak reference issue
     application = Application.builder().token(BOT_TOKEN).job_queue(None).build()
@@ -1224,18 +1257,22 @@ def main() -> None:
     scheduler = AsyncIOScheduler()
     
     # Add command handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("status", status))
-    application.add_handler(CommandHandler("check", check_command))
-    application.add_handler(CommandHandler("latest", latest_command))
-    application.add_handler(CommandHandler("commits", commits_command))
-    application.add_handler(CommandHandler("commit", commit_command))
-    application.add_handler(CommandHandler("changelog", changelog_command))
-    application.add_handler(CommandHandler("changelog_latest", changelog_latest_command))
-    application.add_handler(CommandHandler("version", version_command))
-    application.add_handler(CommandHandler("start_monitoring", start_monitoring_command))
-    application.add_handler(CommandHandler("stop_monitoring", stop_monitoring_command))
+    application.add_handler(CommandHandler("start", start, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("help", help_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("status", status, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("check", check_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("latest", latest_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("commits", commits_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("commit", commit_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("changelog", changelog_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("changelog_latest", changelog_latest_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("version", version_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("start_monitoring", start_monitoring_command, filters=COMMAND_ACCESS_FILTER))
+    application.add_handler(CommandHandler("stop_monitoring", stop_monitoring_command, filters=COMMAND_ACCESS_FILTER))
+
+    if AUTHORIZED_USER_IDS:
+        unauthorized_filter = PRIVATE_CHAT_FILTER & (~filters.User(AUTHORIZED_USER_IDS))
+        application.add_handler(MessageHandler(unauthorized_filter, handle_unauthorized_message))
 
     print("Bot handlers registered successfully:")
     print("  /start - Welcome message")

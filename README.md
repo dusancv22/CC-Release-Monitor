@@ -97,8 +97,11 @@ Key settings in `.env`:
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 GITHUB_API_TOKEN=your_github_token_here  # Optional but recommended
 GITHUB_REPO=anthropics/claude-code
+AUTHORIZED_USER_IDS=123456789
 CHECK_INTERVAL_MINUTES=30
 ```
+
+Set `AUTHORIZED_USER_IDS` to a comma-separated list of Telegram numeric user IDs to keep the bot private. Leave it blank to allow anyone to chat with the bot.
 
 ## 📁 Project Structure
 

@@ -45,6 +45,47 @@ class BotTrayApp:
         self.logger = logging.getLogger(__name__)
         self.logger.info("Tray bot application started")
         
+    def _candidate_python_paths(self):
+        """Yield possible Python executables to run the bot"""
+        script_dir = Path(__file__).parent
+        candidates = []
+
+        current_exec = Path(sys.executable) if sys.executable else None
+        if current_exec:
+            candidates.append(current_exec)
+            if current_exec.name.lower() == "pythonw.exe":
+                candidates.append(current_exec.with_name("python.exe"))
+
+        candidates.extend([
+            script_dir / "venv" / "Scripts" / "pythonw.exe",
+            script_dir / "venv" / "Scripts" / "python.exe"
+        ])
+
+        venv_env = os.environ.get("VIRTUAL_ENV")
+        if venv_env:
+            venv_dir = Path(venv_env)
+            candidates.extend([
+                venv_dir / "Scripts" / "pythonw.exe",
+                venv_dir / "Scripts" / "python.exe"
+            ])
+
+        seen = set()
+        for candidate in candidates:
+            if not candidate:
+                continue
+            candidate = candidate.resolve()
+            if candidate in seen:
+                continue
+            seen.add(candidate)
+            yield candidate
+
+    def resolve_python_executable(self):
+        """Determine which Python executable should launch the bot"""
+        for candidate in self._candidate_python_paths():
+            if candidate.exists():
+                return str(candidate)
+        return "python"
+
     def create_icon_image(self):
         """Create a simple icon for the system tray"""
         # Create a simple blue circle icon
@@ -70,16 +111,19 @@ class BotTrayApp:
                 
             # Start the bot in a subprocess
             bot_path = Path(__file__).parent / "simple_bot.py"
-            python_exe = r"C:\Users\Dusan\miniconda3\python.exe"
-            
-            # Verify files exist
+            python_exe = self.resolve_python_executable()
+
             if not bot_path.exists():
                 self.logger.error(f"Bot script not found at {bot_path}")
                 return
-            if not Path(python_exe).exists():
+
+            if python_exe != "python" and not Path(python_exe).exists():
                 self.logger.error(f"Python executable not found at {python_exe}")
                 return
-            
+
+            if python_exe == "python":
+                self.logger.warning("Falling back to 'python' from PATH; activate your virtual environment if available.")
+
             self.logger.info(f"Starting bot: {python_exe} {bot_path}")
             
             # Use CREATE_NO_WINDOW flag to hide console on Windows

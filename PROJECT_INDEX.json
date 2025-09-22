@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2025-09-22T15:34:36.832849",
+  "indexed_at": "2025-09-22T15:42:31.663578",
   "root": ".",
   "project_structure": {
     "type": "tree",
@@ -495,9 +495,9 @@
               "doc": "Start the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_with_tray",
+                "BotTrayApp.run_hidden",
                 "BotTrayApp.restart_bot",
-                "BotTrayApp.run_hidden"
+                "BotTrayApp.run_with_tray"
               ]
             },
             "_monitor_bot_process": {
@@ -508,10 +508,10 @@
               "doc": "Stop the bot process",
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_with_tray",
+                "BotTrayApp.run_hidden",
                 "BotTrayApp.restart_bot",
-                "BotTrayApp.quit_app",
-                "BotTrayApp.run_hidden"
+                "BotTrayApp.run_with_tray",
+                "BotTrayApp.quit_app"
               ]
             },
             "restart_bot": {
@@ -650,10 +650,10 @@
               "doc": "Send error message to user.",
               "signature": "async (self, update: Update, message: str) -> None",
               "called_by": [
-                "CCReleaseMonitorBot.error_handler",
-                "CCReleaseMonitorBot.status_command",
                 "CCReleaseMonitorBot.help_command",
-                "CCReleaseMonitorBot.start_command"
+                "CCReleaseMonitorBot.error_handler",
+                "CCReleaseMonitorBot.start_command",
+                "CCReleaseMonitorBot.status_command"
               ]
             },
             "start": {
@@ -664,9 +664,9 @@
               "signature": "async (self) -> None",
               "called_by": [
                 "main",
+                "start_monitoring_command",
                 "post_init",
-                "CCReleaseMonitorBot.run_forever",
-                "start_monitoring_command"
+                "CCReleaseMonitorBot.run_forever"
               ]
             },
             "stop": {
@@ -1047,15 +1047,15 @@
               ],
               "signature": "(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
-                "GitHubClient.get_latest_release",
                 "GitHubClient.get_releases",
+                "GitHubClient.get_latest_release",
                 "GitHubClient.get_commit",
-                "GitHubClient.get_commits",
-                "GitHubClient.compare_commits",
-                "GitHubClient.get_repository_info",
-                "GitHubClient.get_file_content",
+                "GitHubClient.get_release_by_tag",
                 "GitHubClient.get_file_last_commit",
-                "GitHubClient.get_release_by_tag"
+                "GitHubClient.compare_commits",
+                "GitHubClient.get_file_content",
+                "GitHubClient.get_repository_info",
+                "GitHubClient.get_commits"
               ]
             },
             "get_latest_release": {
@@ -1118,8 +1118,8 @@
               ],
               "signature": "(self, per_page: int = 10, page: int = 1, branch: str = None) -> List[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.get_commits_async",
-                "GitHubClient.fetch_commits"
+                "GitHubClient.fetch_commits",
+                "GitHubClient.get_commits_async"
               ]
             },
             "get_commit": {
@@ -1128,8 +1128,8 @@
               ],
               "signature": "(self, commit_sha: str) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.fetch_commit",
-                "GitHubClient.get_commit_async"
+                "GitHubClient.get_commit_async",
+                "GitHubClient.fetch_commit"
               ]
             },
             "get_commits_async": {
@@ -1176,8 +1176,8 @@
               ],
               "signature": "(self, file_path: str) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.fetch_last_commit",
-                "GitHubClient.get_file_last_commit_async"
+                "GitHubClient.get_file_last_commit_async",
+                "GitHubClient.fetch_last_commit"
               ]
             },
             "get_file_content": {
@@ -1443,8 +1443,8 @@
               "doc": "Parse ISO date string to datetime object.",
               "signature": "(self, date_string: Optional[str]) -> Optional[datetime]",
               "called_by": [
-                "ReleaseParser._parse_assets",
                 "ReleaseParser.parse_commit",
+                "ReleaseParser._parse_assets",
                 "ReleaseParser.parse_release"
               ]
             },
@@ -1693,12 +1693,12 @@
               "doc": "Save version data to file.",
               "signature": "(self) -> bool",
               "called_by": [
-                "VersionManager.set_monitoring_active",
-                "VersionManager.update_commit",
+                "VersionManager.reset_data",
                 "VersionManager.mark_notification_sent",
                 "VersionManager.update_version",
-                "VersionManager.reset_data",
-                "VersionManager.update_changelog"
+                "VersionManager.set_monitoring_active",
+                "VersionManager.update_changelog",
+                "VersionManager.update_commit"
               ]
             },
             "_load_history": {
@@ -1712,10 +1712,10 @@
               "doc": "Save version history to file.",
               "signature": "(self) -> bool",
               "called_by": [
-                "VersionManager._add_to_history",
+                "VersionManager._add_changelog_to_history",
                 "VersionManager.reset_data",
                 "VersionManager._add_commit_to_history",
-                "VersionManager._add_changelog_to_history"
+                "VersionManager._add_to_history"
               ]
             },
             "_add_to_history": {
@@ -1738,8 +1738,8 @@
               "doc": "Get the last known version.",
               "signature": "(self) -> Optional[str]",
               "called_by": [
-                "VersionManager.get_statistics",
-                "VersionManager.is_newer_version"
+                "VersionManager.is_newer_version",
+                "VersionManager.get_statistics"
               ]
             },
             "get_last_release_data": {
@@ -2298,5 +2298,5 @@
       "logging"
     ]
   },
-  "staleness_check": 1757943277.666801
+  "staleness_check": 1757943752.329258
 }

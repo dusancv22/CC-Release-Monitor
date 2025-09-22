@@ -4,7 +4,7 @@ Configuration management for CC Release Monitor.
 
 import os
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, List
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -148,6 +148,24 @@ class Config:
         """Get data directory path."""
         return os.path.abspath(os.getenv("DATA_DIRECTORY", "./data"))
     
+    @property
+    def authorized_user_ids(self) -> List[int]:
+        """List of Telegram user IDs permitted to use the bot."""
+        raw_value = os.getenv("AUTHORIZED_USER_IDS", "")
+        if not raw_value:
+            return []
+
+        ids: List[int] = []
+        for part in raw_value.replace(";", ",").split(','):
+            candidate = part.strip()
+            if not candidate:
+                continue
+            try:
+                ids.append(int(candidate))
+            except ValueError:
+                logging.warning("Ignoring invalid Telegram user id in AUTHORIZED_USER_IDS: %s", candidate)
+        return ids
+
     @property
     def log_directory(self) -> str:
         """Get log directory path."""
