@@ -71,17 +71,33 @@ class GitHubClient:
     
     def _check_rate_limit(self, response: requests.Response) -> None:
         """Check and handle rate limit headers."""
-        self.rate_limit_remaining = int(response.headers.get("X-RateLimit-Remaining", 0))
+        remaining_header = response.headers.get("X-RateLimit-Remaining")
         reset_time = response.headers.get("X-RateLimit-Reset")
-        
+
+        if remaining_header is not None:
+            try:
+                self.rate_limit_remaining = int(remaining_header)
+            except ValueError:
+                logger.debug(f"Unable to parse rate limit remaining header: {remaining_header}")
+                self.rate_limit_remaining = None
+        else:
+            # Preserve previous count if we have one; otherwise treat as unknown
+            self.rate_limit_remaining = None
+
         if reset_time:
-            self.rate_limit_reset_time = datetime.fromtimestamp(int(reset_time), tz=timezone.utc)
-        
+            try:
+                self.rate_limit_reset_time = datetime.fromtimestamp(int(reset_time), tz=timezone.utc)
+            except ValueError:
+                logger.debug(f"Unable to parse rate limit reset header: {reset_time}")
+                self.rate_limit_reset_time = None
+
         logger.debug(f"Rate limit remaining: {self.rate_limit_remaining}")
-        
+
         if self.rate_limit_remaining == 0:
-            reset_in = (self.rate_limit_reset_time - datetime.now(timezone.utc)).total_seconds()
-            raise RateLimitError(f"Rate limit exceeded. Resets in {reset_in:.0f} seconds")
+            if self.rate_limit_reset_time:
+                reset_in = (self.rate_limit_reset_time - datetime.now(timezone.utc)).total_seconds()
+                raise RateLimitError(f"Rate limit exceeded. Resets in {reset_in:.0f} seconds")
+            raise RateLimitError("Rate limit exceeded")
     
     def _make_request(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """

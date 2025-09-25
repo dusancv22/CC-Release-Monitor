@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"C:\\Users\\dusan\\source\\repos\\CC-Release-Monitor\\.claude\\hooks\\remote_approval.py\"",
+            "command": "python \"C:\\Users\\Dusan\\source\\repos\\Claude Code Bot\\.claude\\hooks\\remote_approval.py\"",
             "timeout": 60
           }
         ]

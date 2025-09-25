@@ -7,6 +7,7 @@ import logging
 from typing import Optional, Any, List
 from pathlib import Path
 from dotenv import load_dotenv
+load_dotenv()
 
 
 class ConfigError(Exception):
@@ -27,8 +28,6 @@ class Config:
         # Load environment variables
         if env_file:
             load_dotenv(env_file)
-        else:
-            load_dotenv()
 
         # Store as instance variables so they can be overridden
         self._github_repo = os.getenv("GITHUB_REPO", "anthropics/claude-code")
@@ -70,7 +69,12 @@ class Config:
     @property
     def github_api_token(self) -> Optional[str]:
         """Get GitHub API token (optional)."""
-        return os.getenv("GITHUB_API_TOKEN")
+        token = os.getenv("GITHUB_API_TOKEN", "").strip()
+        if not token:
+            return None
+        if token.lower().startswith("your_") or token.lower().startswith("placeholder"):
+            return None
+        return token
     
     @property
     def github_repo(self) -> str:

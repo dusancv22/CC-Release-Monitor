@@ -1,25 +1,145 @@
 {
-  "indexed_at": "2025-09-22T22:11:20.486886",
+  "indexed_at": "2025-09-25T14:24:30.657624",
   "root": ".",
   "project_structure": {
     "type": "tree",
     "root": ".",
     "tree": [
       ".",
-      "+-- data/ (2 files)",
+      "+-- data/ (4 files)",
       "|   +-- claude_code/ (2 files)",
-      "|   +-- codex/",
+      "|   `-- codex/",
       "+-- docs/",
       "+-- images/",
       "+-- logs/",
       "+-- src/ (12 files)",
-      "|   +-- models/ (2 files)",
+      "|   `-- models/ (2 files)",
       "+-- tests/ (2 files)",
+      "+-- venv_py313/ (482 files)",
+      "|   +-- Include/",
+      "|   +-- Lib/ (482 files)",
+      "|   |   `-- site-packages/ (482 files)",
+      "|   |       +-- apscheduler/ (38 files)",
+      "|   |       |   +-- executors/ (9 files)",
+      "|   |       |   +-- jobstores/ (8 files)",
+      "|   |       |   +-- schedulers/ (9 files)",
+      "|   |       |   `-- triggers/ (8 files)",
+      "|   |       |       `-- cron/ (3 files)",
+      "|   |       +-- APScheduler-3.10.4.dist-info/",
+      "|   |       +-- dotenv/ (8 files)",
+      "|   |       +-- pip/ (402 files)",
+      "|   |       |   +-- _internal/ (150 files)",
+      "|   |       |   |   +-- cli/ (13 files)",
+      "|   |       |   |   +-- commands/ (19 files)",
+      "|   |       |   |   +-- distributions/ (5 files)",
+      "|   |       |   |   +-- index/ (4 files)",
+      "|   |       |   |   +-- locations/ (4 files)",
+      "|   |       |   |   +-- metadata/ (8 files)",
+      "|   |       |   |   |   `-- ...",
+      "|   |       |   |   +-- models/ (13 files)",
+      "|   |       |   |   +-- network/ (8 files)",
+      "|   |       |   |   +-- operations/ (15 files)",
+      "|   |       |   |   |   `-- ...",
+      "|   |       |   |   +-- req/ (7 files)",
+      "|   |       |   |   +-- resolution/ (13 files)",
+      "|   |       |   |   |   `-- ...",
+      "|   |       |   |   +-- utils/ (26 files)",
+      "|   |       |   |   `-- vcs/ (6 files)",
+      "|   |       |   `-- _vendor/ (249 files)",
+      "|   |       |       +-- cachecontrol/ (12 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- certifi/ (3 files)",
+      "|   |       |       +-- dependency_groups/ (6 files)",
+      "|   |       |       +-- distlib/ (5 files)",
+      "|   |       |       +-- distro/ (3 files)",
+      "|   |       |       +-- idna/ (8 files)",
+      "|   |       |       +-- msgpack/ (4 files)",
+      "|   |       |       +-- packaging/ (16 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- pkg_resources/ (1 files)",
+      "|   |       |       +-- platformdirs/ (8 files)",
+      "|   |       |       +-- pygments/ (23 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- pyproject_hooks/ (4 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- requests/ (18 files)",
+      "|   |       |       +-- resolvelib/ (9 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- rich/ (77 files)",
+      "|   |       |       +-- tomli/ (4 files)",
+      "|   |       |       +-- tomli_w/ (2 files)",
+      "|   |       |       +-- truststore/ (6 files)",
+      "|   |       |       `-- urllib3/ (39 files)",
+      "|   |       |           `-- ...",
+      "|   |       +-- pip-25.2.dist-info/",
+      "|   |       |   `-- licenses/",
+      "|   |       |       `-- src/",
+      "|   |       |           `-- ...",
+      "|   |       +-- python_dotenv-1.1.1.dist-info/",
+      "|   |       |   `-- licenses/",
+      "|   |       +-- pytz/ (6 files)",
+      "|   |       |   `-- zoneinfo/",
+      "|   |       |       +-- Africa/",
+      "|   |       |       +-- America/",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- Antarctica/",
+      "|   |       |       +-- Arctic/",
+      "|   |       |       +-- Asia/",
+      "|   |       |       +-- Atlantic/",
+      "|   |       |       +-- Australia/",
+      "|   |       |       +-- Brazil/",
+      "|   |       |       +-- Canada/",
+      "|   |       |       +-- Chile/",
+      "|   |       |       +-- Etc/",
+      "|   |       |       +-- Europe/",
+      "|   |       |       +-- Indian/",
+      "|   |       |       +-- Mexico/",
+      "|   |       |       +-- Pacific/",
+      "|   |       |       `-- US/",
+      "|   |       +-- pytz-2025.2.dist-info/",
+      "|   |       +-- six-1.17.0.dist-info/",
+      "|   |       +-- tzdata/ (22 files)",
+      "|   |       |   `-- zoneinfo/ (21 files)",
+      "|   |       |       +-- Africa/ (1 files)",
+      "|   |       |       +-- America/ (5 files)",
+      "|   |       |       |   `-- ...",
+      "|   |       |       +-- Antarctica/ (1 files)",
+      "|   |       |       +-- Arctic/ (1 files)",
+      "|   |       |       +-- Asia/ (1 files)",
+      "|   |       |       +-- Atlantic/ (1 files)",
+      "|   |       |       +-- Australia/ (1 files)",
+      "|   |       |       +-- Brazil/ (1 files)",
+      "|   |       |       +-- Canada/ (1 files)",
+      "|   |       |       +-- Chile/ (1 files)",
+      "|   |       |       +-- Etc/ (1 files)",
+      "|   |       |       +-- Europe/ (1 files)",
+      "|   |       |       +-- Indian/ (1 files)",
+      "|   |       |       +-- Mexico/ (1 files)",
+      "|   |       |       +-- Pacific/ (1 files)",
+      "|   |       |       `-- US/ (1 files)",
+      "|   |       +-- tzdata-2025.2.dist-info/",
+      "|   |       |   `-- licenses/",
+      "|   |       |       `-- licenses/",
+      "|   |       +-- tzlocal/ (5 files)",
+      "|   |       `-- tzlocal-5.3.1.dist-info/",
+      "|   `-- Scripts/",
       "+-- README.md",
-      "+-- requirements.txt"
+      "`-- requirements.txt"
     ]
   },
   "documentation_map": {
+    "AGENTS.md": {
+      "sections": [
+        "Repository Guidelines",
+        "Project Structure & Module Organization",
+        "Build, Test, and Development Commands",
+        "Coding Style & Naming Conventions",
+        "Testing Guidelines",
+        "Commit & Pull Request Guidelines",
+        "Configuration & Operations Notes"
+      ],
+      "architecture_hints": []
+    },
     "CLAUDE.md": {
       "sections": [
         "CLAUDE.md",
@@ -177,15 +297,15 @@
     "src\\models": "Data models and database schemas"
   },
   "stats": {
-    "total_files": 22,
-    "total_directories": 11,
+    "total_files": 21,
+    "total_directories": 152,
     "fully_parsed": {
-      "python": 19
+      "python": 18
     },
     "listed_only": {
       "json": 3
     },
-    "markdown_files": 10
+    "markdown_files": 11
   },
   "files": {
     "PROJECT_INDEX.json": {
@@ -349,6 +469,7 @@
         "os",
         "asyncio",
         "datetime",
+        "typing",
         "dotenv",
         "telegram",
         "telegram.ext",
@@ -364,6 +485,37 @@
         "datetime"
       ],
       "functions": {
+        "_is_version_header": {
+          "doc": "Return True if the provided line looks like a changelog version header.",
+          "signature": "(line: str) -> bool",
+          "called_by": [
+            "extract_changelog_entries"
+          ]
+        },
+        "extract_changelog_entries": {
+          "doc": "Extract up to max_entries changelog sections from raw content.",
+          "calls": [
+            "_is_version_header"
+          ],
+          "signature": "(content: str, max_entries: int = 1, entry_char_limit: int = 1200,) -> List[str]",
+          "called_by": [
+            "latest_command"
+          ]
+        },
+        "format_changelog_timestamp": {
+          "doc": "Format the commit timestamp for CHANGELOG updates.",
+          "signature": "(commit_data: Optional[Dict[str, Any]]) -> Optional[str]",
+          "called_by": [
+            "latest_command"
+          ]
+        },
+        "build_changelog_message": {
+          "doc": "Construct a Telegram-ready message for a changelog entry.",
+          "signature": "(repo: Repository, entry: str, changelog_path: str, timestamp: Optional[str], cached: bool = False,) -> str",
+          "called_by": [
+            "latest_command"
+          ]
+        },
         "get_github_client": {
           "doc": "Get or create a GitHub client for a specific repository.",
           "signature": "(repo_key: str) -> GitHubClient",
@@ -381,10 +533,12 @@
           "doc": "Get or create a version manager for a specific repository.",
           "signature": "(repo_key: str) -> VersionManager",
           "called_by": [
-            "status",
             "check_command",
             "latest_command",
-            "commits_command"
+            "commits_command",
+            "commit_command",
+            "changelog_command",
+            "changelog_latest_command"
           ]
         },
         "is_authorized_user": {
@@ -445,8 +599,7 @@
           "doc": "Send bot status information.",
           "calls": [
             "get_current_repo_text",
-            "get_github_client",
-            "get_version_manager"
+            "get_github_client"
           ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
@@ -459,8 +612,11 @@
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "latest_command": {
-          "doc": "Show information about the latest release.",
+          "doc": "Show information about the latest release or changelog entry.",
           "calls": [
+            "build_changelog_message",
+            "extract_changelog_entries",
+            "format_changelog_timestamp",
             "get_github_client",
             "get_version_manager"
           ],
@@ -477,21 +633,24 @@
         "commit_command": {
           "doc": "Show detailed information about a specific commit.",
           "calls": [
-            "get_github_client"
+            "get_github_client",
+            "get_version_manager"
           ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "changelog_command": {
           "doc": "Show recent CHANGELOG.md updates.",
           "calls": [
-            "get_github_client"
+            "get_github_client",
+            "get_version_manager"
           ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
         "changelog_latest_command": {
           "doc": "Show only the latest CHANGELOG.md entry.",
           "calls": [
-            "get_github_client"
+            "get_github_client",
+            "get_version_manager"
           ],
           "signature": "async (update: Update, context: ContextTypes.DEFAULT_TYPE) -> None"
         },
@@ -584,8 +743,8 @@
               ],
               "signature": "(self, icon=None, item=None)",
               "called_by": [
-                "BotTrayApp.run_hidden",
                 "BotTrayApp.run_with_tray",
+                "BotTrayApp.run_hidden",
                 "BotTrayApp.restart_bot"
               ]
             },
@@ -598,8 +757,8 @@
               "signature": "(self, icon=None, item=None)",
               "called_by": [
                 "BotTrayApp.run_with_tray",
-                "BotTrayApp.run_hidden",
                 "BotTrayApp.quit_app",
+                "BotTrayApp.run_hidden",
                 "BotTrayApp.restart_bot"
               ]
             },
@@ -739,10 +898,10 @@
               "doc": "Send error message to user.",
               "signature": "async (self, update: Update, message: str) -> None",
               "called_by": [
-                "CCReleaseMonitorBot.status_command",
-                "CCReleaseMonitorBot.start_command",
                 "CCReleaseMonitorBot.help_command",
-                "CCReleaseMonitorBot.error_handler"
+                "CCReleaseMonitorBot.status_command",
+                "CCReleaseMonitorBot.error_handler",
+                "CCReleaseMonitorBot.start_command"
               ]
             },
             "start": {
@@ -752,9 +911,9 @@
               ],
               "signature": "async (self) -> None",
               "called_by": [
-                "CCReleaseMonitorBot.run_forever",
                 "start_monitoring_command",
-                "post_init"
+                "post_init",
+                "CCReleaseMonitorBot.run_forever"
               ]
             },
             "stop": {
@@ -1137,15 +1296,15 @@
               ],
               "signature": "(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]",
               "called_by": [
-                "GitHubClient.get_releases",
-                "GitHubClient.get_file_last_commit",
-                "GitHubClient.compare_commits",
                 "GitHubClient.get_release_by_tag",
-                "GitHubClient.get_commit",
-                "GitHubClient.get_latest_release",
+                "GitHubClient.get_releases",
+                "GitHubClient.compare_commits",
+                "GitHubClient.get_file_last_commit",
+                "GitHubClient.get_file_content",
                 "GitHubClient.get_repository_info",
+                "GitHubClient.get_commit",
                 "GitHubClient.get_commits",
-                "GitHubClient.get_file_content"
+                "GitHubClient.get_latest_release"
               ]
             },
             "get_latest_release": {
@@ -1218,8 +1377,8 @@
               ],
               "signature": "(self, commit_sha: str) -> Optional[Dict[str, Any]]",
               "called_by": [
-                "GitHubClient.get_commit_async",
-                "GitHubClient.fetch_commit"
+                "GitHubClient.fetch_commit",
+                "GitHubClient.get_commit_async"
               ]
             },
             "get_commits_async": {
@@ -1276,8 +1435,8 @@
               ],
               "signature": "(self, file_path: str, branch: str = None) -> Optional[str]",
               "called_by": [
-                "GitHubClient.get_file_content_async",
-                "GitHubClient.fetch_file_content"
+                "GitHubClient.fetch_file_content",
+                "GitHubClient.get_file_content_async"
               ]
             },
             "get_file_last_commit_async": {
@@ -1533,9 +1692,9 @@
               "doc": "Parse ISO date string to datetime object.",
               "signature": "(self, date_string: Optional[str]) -> Optional[datetime]",
               "called_by": [
-                "ReleaseParser._parse_assets",
+                "ReleaseParser.parse_commit",
                 "ReleaseParser.parse_release",
-                "ReleaseParser.parse_commit"
+                "ReleaseParser._parse_assets"
               ]
             },
             "_extract_author": {
@@ -1699,7 +1858,9 @@
             "owner",
             "name",
             "display_name",
-            "description"
+            "description",
+            "latest_content_source",
+            "changelog_path"
           ]
         },
         "RepositoryManager": {
@@ -1873,12 +2034,12 @@
               "doc": "Save version data to file.",
               "signature": "(self) -> bool",
               "called_by": [
-                "VersionManager.set_monitoring_active",
                 "VersionManager.reset_data",
-                "VersionManager.mark_notification_sent",
                 "VersionManager.update_version",
-                "VersionManager.update_commit",
-                "VersionManager.update_changelog"
+                "VersionManager.set_monitoring_active",
+                "VersionManager.mark_notification_sent",
+                "VersionManager.update_changelog",
+                "VersionManager.update_commit"
               ]
             },
             "_load_history": {
@@ -1892,10 +2053,10 @@
               "doc": "Save version history to file.",
               "signature": "(self) -> bool",
               "called_by": [
+                "VersionManager._add_to_history",
                 "VersionManager._add_commit_to_history",
                 "VersionManager._add_changelog_to_history",
-                "VersionManager.reset_data",
-                "VersionManager._add_to_history"
+                "VersionManager.reset_data"
               ]
             },
             "_add_to_history": {
@@ -1918,8 +2079,8 @@
               "doc": "Get the last known version.",
               "signature": "(self) -> Optional[str]",
               "called_by": [
-                "VersionManager.is_newer_version",
-                "VersionManager.get_statistics"
+                "VersionManager.get_statistics",
+                "VersionManager.is_newer_version"
               ]
             },
             "get_last_release_data": {
@@ -2142,57 +2303,6 @@
       "language": "python",
       "parsed": false
     },
-    ".claude\\hooks\\remote_approval.py": {
-      "language": "python",
-      "parsed": true,
-      "imports": [
-        "json",
-        "sys",
-        "time",
-        "requests",
-        "typing",
-        "logging",
-        "pathlib"
-      ],
-      "functions": {
-        "should_require_approval": {
-          "doc": "Determine if a tool use should require approval.",
-          "signature": "(tool_name: str, tool_input: Dict[str, Any]) -> bool",
-          "called_by": [
-            "request_approval"
-          ]
-        },
-        "request_approval": {
-          "doc": "Request approval from remote Telegram bot.",
-          "calls": [
-            "should_require_approval"
-          ],
-          "signature": "(input_data: Dict[str, Any]) -> Dict[str, Any]",
-          "called_by": [
-            "main"
-          ]
-        },
-        "main": {
-          "doc": "Main entry point for the hook.",
-          "calls": [
-            "request_approval"
-          ],
-          "signature": "()",
-          "called_by": [
-            "run_bot"
-          ]
-        }
-      },
-      "classes": {},
-      "constants": {
-        "IPC_SERVER": "str",
-        "TIMEOUT": "number",
-        "POLL_INTERVAL": "number",
-        "SENSITIVE_TOOLS": "collection",
-        "SAFE_TOOLS": "collection"
-      },
-      "call_graph": {}
-    },
     "src\\models\\approval.py": {
       "language": "python",
       "parsed": true,
@@ -2221,8 +2331,8 @@
               "doc": "Create from database row.",
               "signature": "(cls, row: tuple) -> 'ApprovalRequest'",
               "called_by": [
-                "ApprovalQueue.get_request",
-                "ApprovalQueue.get_pending"
+                "ApprovalQueue.get_pending",
+                "ApprovalQueue.get_request"
               ]
             },
             "format_for_telegram": {
@@ -2348,6 +2458,7 @@
       "os",
       "asyncio",
       "datetime",
+      "typing",
       "dotenv",
       "telegram",
       "telegram.ext",
@@ -2461,15 +2572,6 @@
       "unittest.mock",
       "src.config"
     ],
-    ".claude\\hooks\\remote_approval.py": [
-      "json",
-      "sys",
-      "time",
-      "requests",
-      "typing",
-      "logging",
-      "pathlib"
-    ],
     "src\\models\\approval.py": [
       "sqlite3",
       "json",
@@ -2481,5 +2583,5 @@
       "logging"
     ]
   },
-  "staleness_check": 1757967081.536462
+  "staleness_check": 1758198271.471903
 }

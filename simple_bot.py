@@ -7,7 +7,8 @@ Supports monitoring multiple GitHub repositories including Claude Code and OpenA
 import logging
 import os
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -56,6 +57,127 @@ if AUTHORIZED_USER_IDS:
     COMMAND_ACCESS_FILTER = PRIVATE_CHAT_FILTER & filters.User(AUTHORIZED_USER_IDS)
 else:
     COMMAND_ACCESS_FILTER = PRIVATE_CHAT_FILTER
+
+
+
+def _is_version_header(line: str) -> bool:
+    """Return True if the provided line looks like a changelog version header."""
+    if not line or not line.startswith("#"):
+        return False
+
+    hashes = len(line) - len(line.lstrip("#"))
+    if hashes == 0 or hashes > 3:
+        return False
+
+    title = line[hashes:].strip()
+    if not title:
+        return False
+
+    lowered = title.lower()
+    return (
+        "version" in lowered
+        or lowered.startswith("v")
+        or any(char.isdigit() for char in lowered)
+    )
+
+
+def extract_changelog_entries(
+    content: str,
+    max_entries: int = 1,
+    entry_char_limit: int = 1200,
+) -> List[str]:
+    """Extract up to max_entries changelog sections from raw content."""
+    entries: List[str] = []
+    current: List[str] = []
+    current_length = 0
+    in_entry = False
+
+    for raw_line in content.splitlines():
+        stripped = raw_line.strip()
+
+        if _is_version_header(stripped):
+            if current:
+                entries.append("\n".join(current).strip())
+                if len(entries) >= max_entries:
+                    return entries
+
+            current = [stripped]
+            current_length = len(stripped)
+            in_entry = True
+            continue
+
+        if not in_entry:
+            continue
+
+        line_to_add = stripped if stripped else ""
+        prospective_length = current_length + len(line_to_add) + 1
+        if entry_char_limit is None or prospective_length <= entry_char_limit:
+            current.append(line_to_add)
+            current_length = prospective_length
+
+    if current and len(entries) < max_entries:
+        entries.append("\n".join(current).strip())
+
+    return entries
+
+
+def format_changelog_timestamp(commit_data: Optional[Dict[str, Any]]) -> Optional[str]:
+    """Format the commit timestamp for CHANGELOG updates."""
+    if not commit_data:
+        return None
+
+    try:
+        date_str = commit_data["commit"]["author"]["date"]
+    except (KeyError, TypeError):
+        return None
+
+    try:
+        commit_dt = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        return date_str
+
+    return format_datetime(commit_dt.replace(tzinfo=timezone.utc))
+
+
+def build_changelog_message(
+    repo: Repository,
+    entry: str,
+    changelog_path: str,
+    timestamp: Optional[str],
+    cached: bool = False,
+) -> str:
+    """Construct a Telegram-ready message for a changelog entry."""
+    header = "*Latest changelog update*"
+    if cached:
+        header += " (cached)"
+
+    parts = [
+        header,
+        "",
+        f"Repository: `{repo.full_name}`",
+    ]
+
+    if timestamp:
+        parts.append(f"*Last updated:* {timestamp}")
+
+    parts.extend(
+        [
+            "",
+            entry,
+            "",
+            f"[View {changelog_path} on GitHub](https://github.com/{repo.full_name}/blob/main/{changelog_path})",
+        ]
+    )
+
+    if cached:
+        parts.extend(
+            [
+                "",
+                "Cached data - run `/changelog_latest` to refresh from GitHub.",
+            ]
+        )
+
+    return "\n".join(parts)
 
 def get_github_client(repo_key: str) -> GitHubClient:
     """Get or create a GitHub client for a specific repository."""
@@ -159,7 +281,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         '• `/help` - This help message\n'
         '• `/status` - Bot status and GitHub connection info\n'
         '• `/check` - Check for new releases and commits\n'
-        '• `/latest` - Show information about the latest release\n'
+        '• `/latest` - Show latest release or changelog entry\n'
         '• `/commits` - Show recent commits from the repository\n'
         '• `/commit <sha>` - Show detailed information about a specific commit\n'
         '• `/changelog` - Show recent CHANGELOG.md updates\n'
@@ -214,7 +336,7 @@ async def handle_repository_selection(update: Update, context: ContextTypes.DEFA
                 f'/help - Show all commands\n'
                 f'/status - Check bot status\n'
                 f'/check - Check for new releases\n'
-                f'/latest - Show latest release\n'
+                f'/latest - Show latest release or changelog entry\n'
                 f'/commits - Show recent commits\n'
                 f'/switch - Switch to different repository\n\n'
                 f'You can now use any command to interact with this repository.',
@@ -229,7 +351,6 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     repo = repository_manager.get_user_repository(user_id)
     repo_key = repository_manager.get_user_repo_key(user_id)
     github_client = get_github_client(repo_key)
-    version_manager = get_version_manager(repo_key)
 
     try:
         # Test GitHub connection for this repository
@@ -425,7 +546,7 @@ async def check_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         )
 
 async def latest_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Show information about the latest release."""
+    """Show information about the latest release or changelog entry."""
     user_id = update.effective_user.id
     repo = repository_manager.get_user_repository(user_id)
     repo_key = repository_manager.get_user_repo_key(user_id)
@@ -433,6 +554,73 @@ async def latest_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     version_manager = get_version_manager(repo_key)
     
     try:
+        if getattr(repo, "latest_content_source", "release") == "changelog":
+            changelog_file = getattr(repo, "changelog_path", "CHANGELOG.md")
+            cached_content = version_manager.get_last_changelog_content()
+
+            if cached_content:
+                entries = extract_changelog_entries(cached_content, max_entries=1)
+                if entries:
+                    message = build_changelog_message(
+                        repo,
+                        entries[0],
+                        changelog_file,
+                        timestamp=None,
+                        cached=True,
+                    )
+                    await update.message.reply_text(
+                        message,
+                        parse_mode='Markdown',
+                        disable_web_page_preview=True,
+                    )
+                    return
+
+            status_msg = await update.message.reply_text(
+                f'*Fetching latest changelog entry...*\n\n'
+                f'Repository: `{repo.full_name}`',
+                parse_mode='Markdown'
+            )
+
+            changelog_content = await github_client.get_file_content_async(changelog_file)
+
+            if not changelog_content:
+                await status_msg.edit_text(
+                    '*CHANGELOG not found*\n\n'
+                    f'No {changelog_file} file found in repository `{repo.full_name}`.\n\n'
+                    'The repository may not maintain a changelog file.',
+                    parse_mode='Markdown'
+                )
+                return
+
+            version_manager.update_changelog(changelog_content)
+            entries = extract_changelog_entries(changelog_content, max_entries=1)
+
+            if not entries:
+                await status_msg.edit_text(
+                    '*No changelog entries found*\n\n'
+                    f'{changelog_file} exists but no version entries were detected.\n\n'
+                    'The changelog format may not be recognized.',
+                    parse_mode='Markdown'
+                )
+                return
+
+            last_commit = await github_client.get_file_last_commit_async(changelog_file)
+            timestamp = format_changelog_timestamp(last_commit)
+            message = build_changelog_message(
+                repo,
+                entries[0],
+                changelog_file,
+                timestamp=timestamp,
+                cached=False,
+            )
+
+            await status_msg.edit_text(
+                message,
+                parse_mode='Markdown',
+                disable_web_page_preview=True
+            )
+            return
+
         # Try to get cached release data first
         cached_release = version_manager.get_latest_release_data()
         
@@ -441,16 +629,16 @@ async def latest_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             summary = release_parser.format_release_summary(parsed_release)
             
             message = (
-                f'📦 *Latest Known Release*\n\n'
+                f'*Latest Known Release*\n\n'
                 f'Repository: `{repo.full_name}`\n\n'
                 f'{summary}\n\n'
-                f'🔗 [View on GitHub]({parsed_release["url"]})\n\n'
-                f'💾 *Cached data* - Use `/check` to fetch latest from GitHub.'
+                f'[View on GitHub]({parsed_release["url"]})\n\n'
+                f'*Cached data* - Use `/check` to fetch latest from GitHub.'
             )
         else:
             # No cached data, fetch from GitHub
             status_msg = await update.message.reply_text(
-                f'🔍 *Fetching latest release...*\n\n'
+                f'*Fetching latest release...*\n\n'
                 f'Repository: `{repo.full_name}`',
                 parse_mode='Markdown'
             )
@@ -459,7 +647,7 @@ async def latest_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             
             if not release_data:
                 await status_msg.edit_text(
-                    '❌ *No releases found*\n\n'
+                    '*No releases found*\n\n'
                     f'No releases found for repository `{repo.full_name}`.',
                     parse_mode='Markdown'
                 )
@@ -581,6 +769,7 @@ async def commit_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     repo = repository_manager.get_user_repository(user_id)
     repo_key = repository_manager.get_user_repo_key(user_id)
     github_client = get_github_client(repo_key)
+    version_manager = get_version_manager(repo_key)
     
     try:
         # Check if SHA was provided
@@ -742,6 +931,7 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     repo = repository_manager.get_user_repository(user_id)
     repo_key = repository_manager.get_user_repo_key(user_id)
     github_client = get_github_client(repo_key)
+    version_manager = get_version_manager(repo_key)
     
     try:
         # Send initial "fetching" message
@@ -764,6 +954,8 @@ async def changelog_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                     parse_mode='Markdown'
                 )
                 return
+            
+            version_manager.update_changelog(changelog_content)
             
             # Parse changelog content to get recent entries
             changelog_lines = changelog_content.split('\n')
@@ -896,6 +1088,7 @@ async def changelog_latest_command(update: Update, context: ContextTypes.DEFAULT
     repo = repository_manager.get_user_repository(user_id)
     repo_key = repository_manager.get_user_repo_key(user_id)
     github_client = get_github_client(repo_key)
+    version_manager = get_version_manager(repo_key)
     
     try:
         # Send initial "fetching" message
@@ -918,6 +1111,8 @@ async def changelog_latest_command(update: Update, context: ContextTypes.DEFAULT
                     parse_mode='Markdown'
                 )
                 return
+            
+            version_manager.update_changelog(changelog_content)
             
             # Parse changelog content to get the latest entry only
             changelog_lines = changelog_content.split('\n')
@@ -1072,7 +1267,7 @@ def main() -> None:
     print("  /help - Show help information")
     print("  /status - Show bot status and GitHub connection")
     print("  /check - Check for new releases and commits")
-    print("  /latest - Show latest release information")
+    print("  /latest - Show latest release or changelog entry")
     print("  /commits - Show recent commits from repository")
     print("  /commit <sha> - Show detailed info about a specific commit")
     print("  /changelog - Show recent CHANGELOG.md updates")

@@ -15,6 +15,8 @@ class Repository:
     name: str
     display_name: str
     description: str
+    latest_content_source: str = "release"
+    changelog_path: str = "CHANGELOG.md"
     
     @property
     def full_name(self) -> str:
@@ -33,7 +35,8 @@ REPOSITORIES = {
         owner="anthropics",
         name="claude-code",
         display_name="Claude Code",
-        description="Anthropic's official CLI for Claude"
+        description="Anthropic's official CLI for Claude",
+        latest_content_source="changelog",
     ),
     "codex": Repository(
         owner="openai",
